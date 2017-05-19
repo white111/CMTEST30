@@ -1,0 +1,75 @@
+################################################################################
+#
+# Module:      ShelfManager.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench_Prog.dat,v 1.2 2008/02/20 22:03:49 joe Exp $
+#
+# Changes:    Created from Bench_IMC.dat  10/19/06
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2015 Mavenir. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+<Msg>		"Login to Shelf manager ..."
+
+<Prompt>	"user|assword|#"
+<send>
+<wait>
+<GetData>
+<Prompt>	"user|assword|#"
+<send>      "root"
+<wait>
+<GetData>
+<Prompt>	"#"
+<send>
+<wait>
+<GetData>
+<send>      "clia shmstatus"
+<wait>
+<GetData>
+<CheckData>	"Host: Active"
+
+<send>      "clia shelfaddress 0"
+<wait>
+<GetData>
+<send>      "clia shelfaddress"
+<wait>
+<GetData>
+<CheckData>	"Shelf Address Info: .0."
+
+<msg>	"Check POST..."
+<send>	"dmesg | grep POST"
+<wait>
+<GetData>
+<CheckDatax>	"fail|Fail|FAIL"
+
+<send>	"dmesg | grep -i vers"
+<wait>
+<GetData>
+
+<send>	"dmesg | grep -i rev"
+<wait>
+<GetData>
+
+<send>	"dmesg | grep -i fail"
+<wait>
+<GetData>
+<CheckDatax>	"fail|Fail|FAIL"
+
+
+<msg>	"Get Shelf manager info..."
+<send>	"clia version"
+<wait>
+<GetData>
+
+
+<End>

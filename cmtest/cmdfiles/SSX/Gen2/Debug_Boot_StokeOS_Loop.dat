@@ -1,0 +1,89 @@
+################################################################################
+#
+# Module:      Debug_Boot_StokeOS_Loop.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis configuration test
+#
+# Version:    1.0 $Id: Chassis_Pre_BI_XGLC.dat,v 1.2 2012/02/17 17:13:41 joe Exp $
+#
+# Changes:    Created 03/22/12
+#
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+<ETTC>		2000
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Exec>		Init_HA_Port
+<timeout>	120
+<GetData>	ShowMFG
+<Set>    	$Slot_INST_0_GBL
+<Set>    	$Slot_INST_1_GBL
+<Set>    	$Slot_INST_2_GBL
+<Set>   	$Slot_INST_3_GBL
+<Set>    	$Slot_INST_4_GBL
+<Prompt>   "LCR[local]"
+<send>
+<Wait>
+#<Include>   Wait_Card_Stoke.inc
+<Msg>      "Wait 5min Sec for cards to come ready"
+<Sleep>        300
+
+<Loop>		43200
+     <Msg>		"Turning on UUT Power ..."
+     <Power>		ON
+
+	<timeout>	120
+	<Prompt>   "LCR[local]"
+	<send>
+	<Wait>
+	<Msg>      "Wait 5min for cards to come ready"
+	<Sleep>        300
+	#<Include>   Ship_config.inc
+	#<Include>   Configuration_test_XGLC.inc
+	<Include>   Show_Card_Stoke_XGLC.inc
+	<Include>   Check_Log_Error_XGLC.inc
+	#<Include>   HA_Switchover_XGLC.inc
+	<Include>   Check_Software_version_XGLC.inc
+	<Include>   Show_Mem_Stoke_XGLC.inc
+
+
+	<Msg>		"Shutting down system..."
+	<Timeout>	120
+	<prompt>	"yes"
+	<Send>		"reload"
+	<wait>
+	<Send>		"y"
+	#<wait>
+	<sleep>		1
+	<Prompt>   "LCR[local]"
+	<Send>		"y"
+	#<Wait>
+	<GetData>
+	#<Include>   Wait_Card_Stoke.inc
+	#<Msg>      "Wait 120 Sec for cards to come ready"
+	#<Sleep>        120
+       <Sleep> 	2
+    <Msg>       "Turning off UUT Power ..."
+    <Power>     OFF
+    <Sleep> 5
+</loop>
+
+#
+
+<Msg>		"Stopping here"
+<Msg>       "Turning off UUT Power ..."
+<Power>     OFF
+<End>
+

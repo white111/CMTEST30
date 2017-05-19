@@ -1,0 +1,280 @@
+################################################################################
+#
+# Module:      Debug_Bench_GLC_Powercyle.dat
+#
+# Author:      Joe White
+#
+# Descr:       Power Cycle test
+#		       #	PCI Startup
+#				Forwarding unit Startup
+#				# Sram Startup
+#			    Cavium Basic Operation
+#				#TCAM operation
+#				#Sahasera Operation
+#
+# Version:    1.0  $Id: Bench_GLC.inc,v 1.7.2.1 2011/01/21 17:45:25 joe Exp $
+#
+# Changes:    Created 4/19/12   NPF Process Script
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<ETTC>		700
+
+<Sleep>		5
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+<Include>	Stop_stoke_boot.inc
+
+<Msg>		"Test GLC"
+<Msg>		"Verify at Stoke>>.."
+<TimeOut>	5
+<Send>		""
+<WaitFor>	"Stoke>>"
+
+<Prompt>	">"
+<TimeOut>	5
+<Msg>		"Starting Noodle..."
+<Send>		"go ffe00100"
+<Wait>
+
+<Send>		"show version"
+<Wait>
+<GetData>
+
+<TimeOut>	10
+<Msg>		"Getting Product / Serial info ..."
+<Send>		"rd i2c U67 tlv"
+<Wait>
+<GetData>	Board
+
+<TimeOut>	10
+
+<Send>		"rd i2c fic tlv"
+<Wait>
+<GetData>   SW55thlink
+<Bypass>	$SW55thlink_gbl
+	<Msg> "Check if 5th link tlv present"
+	<CheckData>	"type: 03, len: 03,              FIC TRUNKING BLOCK"
+</Bypass>
+
+       #12Hrs
+<loop>		43200
+	<Prompt>	"#"
+	<TimeOut>	30
+	<Msg>		"Booting IFS flash ..."
+	<Send>		"boot flash"
+	<Waitfor>	"Starting application"
+	<Wait>
+
+	<sleep>		5
+
+	<Send>		"pfeffa show therm"
+	<Wait>
+	<GetData>
+
+	<Send>		"pfeffa show volts"
+	<Wait>
+	<GetData>
+
+	<Send>		"pfeffa show n2 deb"
+	<Wait>
+	<GetData>
+ <Timeout>	120
+ <Msg>		"Start Forwarding unit"
+	<Send>		"time pfeffa test fuinitfabsnake"
+	<Wait>
+	<GetData>
+	<Send>		"time pfeffa test pktloopbkn2trunk"
+	<Wait>
+	<GetData>
+	<timeout>	30
+	<Send>		"if (grep -q "Successful init_ixp2800"  /tmp/fuinit_results) then (echo "PASSED:$?"; echo fuinit completed > /tmp/fuinit_completed ) else (echo "FAILED:$?"; rm /tmp/fuinit_completed) fi"
+	<wait>
+	<GetData>
+	<CheckData>	"PASSED"
+	<Send>		cat /tmp/fuinit_results
+	<Wait>
+	<Getdata>
+	<CheckDataX>	'ERROR: 1 returned from ixp_check_xscale_up'
+	<CheckDataX>	'Reg Address Error'
+	#varies <CheckData>	'Shared memory segment created: 90303000'
+	<CheckData>	'Shared memory segment created successfully, initializing ixp2800 HW'
+	<CheckData>	'Initializing RDRAM Memory'
+	<CheckData>	'Bank 0: 256MB'
+	<CheckData>	'Bank 1: 256MB'
+	<CheckData>	'Bank 2: 256MB'
+	<CheckData>	'Test Reads for SRAM at CSR-f9000'
+	<CheckData>	'Test Reads for SRAM at CSR-f9400'
+	<CheckData>	'Test Reads for SRAM at CSR-f9800'
+	<CheckData>	'Test Reads for SRAM at CSR-f9c00'
+	<CheckData>	'xscale_pci_set_int_bus_priority: Misc Control=3ff0000'
+	<CheckData>	'Downloading: /proc/boot/redboot.bin to location: 0'
+	<CheckData>	'Downloading: /proc/boot/QNX_kernel.ixp.ifs to location: 4000000'
+	<CheckData>	'Waiting for XScale UP..............'
+
+	<CheckData>	'N2 microcode boot image loaded '
+	<CheckData>	'Ctx memory range\(0x0000000-0x10000000\)'
+	<CheckData>	'Cleared 262144 1024-byte blocks in 5 requests.'
+	<CheckData>	'N2 microcode full image loaded \(131048 bytes, 4 images\)'
+	<CheckData>	'Downloading: /fu/snake_load.uof to location: 3000000'
+
+	<CheckData>	'TCAM ayama20k_init...'
+	<CheckData>	'TCAM ayama20k_init DONE!'
+	<CheckData>	'Successful init_ixp2800'
+	<CheckData>	'Successful sram_api_init'
+	<Checkdatax>  "TIMEOUT"
+	<CheckDatax>	 "jiffie"
+	<CheckDatax>	 "_INT_SUM"
+	<CheckDatax>	 "_INT_"
+
+    <Msg>       "Testing Tcam.. time extened from 120 seconds..."
+	<Timeout>   120
+	<Send>      'time pfeffa test tcam'
+	<Wait>
+
+	<CheckData> 'Associated Data    Data Bus Bit Test PASSED'
+	<CheckData> 'Associated Data Address Bus Bit Test PASSED'
+	<CheckData> 'Associated Data Mod3 Memory     Test PASSED'
+	<CheckData> 'TCAM Entry Verify               Test PASSED'
+	<CheckData> 'TCAM Search                     Test PASSED'
+	<CheckData> 'TCAM Search Hit/Miss            Test PASSED'
+	<CheckData> 'Associated Data    Data Bus Bit Test PASSED'
+	<CheckData> 'Associated Data Address Bus Bit Test PASSED'
+	<CheckData> 'Associated Data Mod3 Memory     Test PASSED'
+	<CheckData> 'TCAM Entry Verify               Test PASSED'
+	<CheckData> 'TCAM Search                     Test PASSED'
+	<CheckData> 'TCAM Search Hit/Miss            Test PASSED'
+	<CheckData> 'Test command completed'
+	<iCheckDatax> 'ERROR'
+	<iCheckDatax> 'FAIL'
+	<GetData>
+
+
+			<TimeOut>	60
+			<Msg>	"Testing Sahasra..."
+			<Send>	'time pfeffa test sahasra'
+            <Wait>
+            <GetData>
+            <CheckData>	"PASSED"
+            <CheckData> "Completed tests"
+
+	<Timeout>	90
+	<Msg>		"IXP DDR..."
+	<Sendslow>		"ixtest mt"
+	<Wait>
+	<GetData>
+	#<GetData>	Ixtest_mt
+	<CheckData>	'Passed'
+	<iCheckDataX>	'failed'
+	<iCheckDataX>	'Error'
+
+
+	<Timeout>	60
+	<Msg>		"IXP SRAM Bank 0..."
+	<Send>		"ixtest mt -s0 -p4"
+	<Wait>
+	<GetData>
+	<CheckData>	'Passed'
+	#<CheckDataX>	'failed'
+	#<CheckDataX>	'Error'
+
+	<Msg>		"IXP SRAM Bank 1..."
+	#<Send>		"ixtest mt -s1 0 0x1000000"
+	<Send>		"ixtest mt -s1 -p4"
+	<Wait>
+	<GetData>
+	<CheckData>	'Passed'
+	#<CheckDataX>	'failed'
+	#<CheckDataX>	'Error'
+
+	<Msg>		"IXP SRAM Bank 2 Bottom..."
+	#<Send>		"ixtest mt -s2 0 0x1000000"
+	<Send>		"ixtest mt -s2 0 0x7ffff0"
+	<Wait>
+	<GetData>
+	<CheckData>	'Passed'
+	#<CheckDataX>	'failed'
+	#<CheckDataX>	'Error'
+
+	<Msg>		"IXP SRAM Bank 2 TOP..."
+	#<Send>		"ixtest mt -s2 0 0x1000000"
+	<Send>		"ixtest mt -s2 0x800000 0x7ffff0"
+	<Wait>
+	<GetData>
+	<CheckData>	'Passed'
+	#<CheckDataX>	'failed'
+	#<CheckDataX>	'Error'
+
+	<Msg>		"IXP SRAM Bank 3 Bottom..."
+	#<Send>		"ixtest mt -s3 0 0x1000000"
+	<Send>		"ixtest mt -s3 0 0x7ffff0"
+	<Wait>
+	<GetData>
+	<CheckData>	'Passed'
+	#<CheckDataX>	'failed'
+	#<CheckDataX>	'Error'
+
+	<Msg>		"IXP SRAM Bank 3 Top..."
+	#<Send>		"ixtest mt -s3 0 0x1000000"
+	<Send>		"ixtest mt -s3 0x800000 0x7ffff0"
+	<Wait>
+	<GetData>
+	<CheckData>	'Passed'
+	#<CheckDataX>	'failed'
+	#<CheckDataX>	'Error'
+
+
+	<send>		"ddr_test 0 10000 0"
+	<Wait>
+	<GetData>
+	<CheckData>	"PASS"
+
+	<Send>		"pfeffa show n2 deb"
+	<Wait>
+	<GetData>
+	<Msg>		"Test Voltages..."
+	<Send>		"pfeffa test volt"
+	<Wait>
+	<GetData>
+	<CheckData>	PASS
+
+
+	<Msg>		"Checking DC voltages ..."
+	<Send>		"pfeffa show volt"
+	<Wait>
+	<GetData>	Volts
+
+	<Msg>	"reset board"
+	<Send> pfeffa w8 f400002b 11
+	<Wait>
+	<TimeOut>	30
+	<Prompt>	"Stoke>>"
+	<Send>		"reset board"
+    <Power>		OFF
+    <Sleep>		5
+    <Power>		ON
+	<Include>	Stop_stoke_boot.inc
+	<Send>
+	<Wait>
+
+	<Prompt>	">"
+	<TimeOut>	5
+	<Msg>		"Starting Noodle..."
+	<Send>		"go ffe00100"
+	<Wait>
+   <Send>		"show version"
+	<Wait>
+	<GetData>
+</loop>
+
+<end>

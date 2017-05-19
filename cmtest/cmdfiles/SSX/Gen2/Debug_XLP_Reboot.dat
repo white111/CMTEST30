@@ -1,0 +1,42 @@
+################################################################################
+#
+# Module:      Debug_Bench.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench.dat,v 1.1 2011/12/12 22:54:26 joe Exp $
+#
+# Changes:    Created from Bench.dat  092811
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<Alert>		"XLPs start from fully booted state"
+<TimeOut>	60
+
+<Exec>	GetSerial
+
+
+<Prompt>	"xlp login"
+
+ # 12Hours 60*60*12
+<loop>		43200
+<Msg>		"Wait for XLP login prompt"
+<send>
+<Wait>
+
+<Prompt>	"#"
+<send> "root"
+<wait>
+<Prompt>	"xlp login"
+<send> "reboot"
+</loop>
+
+<End>

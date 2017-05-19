@@ -1,0 +1,232 @@
+################################################################################
+#
+# Module:      Chassis_Config.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis configuration test
+#
+# Version:    3.9 $Id: Chassis_Config.dat,v 1.21.4.1 2012/02/10 04:48:16 joe Exp $
+#
+# Changes:    Added Check IPMI_Chassis.inc 02/16/06
+#			  Added MC and GLC memory checks 05/18/06
+#			 01/30/08 Added Check Disco
+#			  Added Configuration_test.inc  8/21/08
+#			 2/13/09 Booting from HD only
+#			  3/12/09 Moved Show Ship Config last possible step
+#			 Added Chassis test 7/20/09
+#			 Forced Fan speed to low for Fan test start
+#            Reset all slots after chassis test to see if diag bug
+#              causing boot on secondary flash 11/06/09
+#			 Added Stop On fail
+#			 06/3/10 Added First boot of Dual IMC
+#			 07/14/10 Added packet gap change for intermittent trafic failures(same as BI)
+#			 01/14/11 Added Potentia/Psoc checks
+#			 12/19/11 Added Power Cycling for ISSI issue
+#			 01/4/12 Removed Power Cycling for ISSI issue - Separate process added
+#			 08/30/12 Added cmdfiles/Pwr_cycle_test.inc
+#			 10/25/12 Modified to boot from HD for power cycle test
+#
+# Includes:  Check_POST_IMC.inc
+#			 tftp_boot_imc_diag.inc
+#			 check_fabric.inc
+#			 Internal_Snake_setup.inc
+#			 tftpcopy_stoke_config.inc
+#		 	 Show_Card_Stoke.inc
+#		 	 Update_all.inc
+#		 	 Show_Card_Stoke.inc
+#			 Show_Env_Stoke.inc
+#			 Check_Software_version.inc
+#			 Clean_IMC_drives.inc
+#			 Show_Env_Alarm_Stoke.inc
+#			 Check_IPMI_Chassis.inc
+#			 format_IMC_drives40gig.inc
+#
+# Still ToDo:
+#              - Fix intermmittent Traffic failures
+#              - Add memory test on commands
+#
+#
+#            Copyright (c) 2005-2012 Stoke. All rights reserved.
+#
+################################################################################
+#<Msg>		"Turning off UUT Power ..."
+#<Power>		OFF
+<Sleep>		5
+#<Exec>		Init_HA_Port
+<Msg>		"Turning on UUT Power ..."
+<ETTC>		2500
+<Power>		ON
+<Include>	Stop_stoke_bootloader.inc
+<Include>	Firstboot_DualIMC.inc
+<Include>	tftp_boot_imc_diag.inc
+
+
+
+<Msg>		"Get System serial numbers"
+<Timeout>	60
+#Fix for Alarm incorrect rev
+<sendslow>		"if (pfeffa rd i2c 9501 alarm1 tlv 0 | grep "18\.1") then (pfeffa wr i2c 9501 alarm1 tlv 0 h 00 00 00 0E 00 0C 00 01) fi"
+<Wait>
+<GetData>
+<Send>		"pfeffa show mfg"
+<Wait>
+<GetData>	ShowMFG
+<Include>	Set_Fan_Speed.inc
+
+<Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>     $Exit_On_Timeout
+
+ <Msg>		"Set Stop On Error"
+
+<Set>    	$Exit_On_Error
+<Set>		$Exit_On_Timeout
+
+ <Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>    $Exit_On_Timeout
+
+<Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>		Init_HA_Port
+</Bypass>
+
+#Added 7/20/09 from Chassis test
+<Msg>		"Starting Noodle..."
+<Prompt>	"^slot ..>"
+<Send>		"pfeffa"
+<Wait>
+#<Prompt>	"^slot ..>"
+<Send>	"wr i2c 9501 fan1 gpio 47"
+<Wait>
+<Send>	"wr i2c 9501 fan2 gpio 47"
+<Wait>
+<Include>   Chassis_test_Fan.inc
+<Include>   Chassis_test_Fan_TACH.inc
+<Include>   Chassis_test_Alarm.inc
+<Include>   Chassis_test_Pem.inc
+<Send>
+<Wait>
+<Prompt>	"#"
+<Send>		"exit"
+<Wait>
+<Include>	Set_Fan_Speed.inc
+ #Added to check for bug in diag.bin booting card on Secondary Flash
+# <Include>	Reset_all_slots.inc
+<Include>	tftpcopy_stoke_diag.inc
+#
+##### Update Start
+## Versions are checked later
+#<MSG>		"Debug: Update bypassed"
+<Include>	Check_Potentia.inc
+<Include>	Update_all.inc
+
+#Flash update causing instability
+<Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	cfint_boot_diag.inc
+
+<Sleep>		20
+<Include>	Pwr_cycle_test.inc
+
+#### Update End
+
+### Test Area Start
+
+
+
+<Include>	check_fabric.inc
+ <Msg>	"Setting new interpacekt gap"
+#1) pfeffa r8 f1002c3c => F
+#2) pfeffa w8 f1002c3c E  (Disable port 2)
+#3) pfeffa r8 f1002c0c => 6
+#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+#5) pfeffa w8 f1002c3c F (Enable port)
+<Send>		"pfeffa r8 f1002c3c"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c E"
+<Wait>
+<Send>		"pfeffa r8 f1002c0c"
+<Wait>
+<Send>		"pfeffa w8 f1002c0c 7"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c F"
+<Wait>
+<Include>	Internal_Snake_setup.inc
+<Include>   Clear_Disco.inc
+<Include>	Onscript_Start_BI.inc
+<Include>	BI_loopbacktest.inc
+<Include>	Onscript_Check.inc
+<Include>   Check_Disco.inc
+<Include>	Onscript_Start.inc
+<Include>	Onscript_Check.inc
+<Include>   Check_Disco.inc
+<Include>	Check_HDP_Log_Error.inc
+# Moved to End, HA load this causes problems with GLC mounts
+<Include>	Check_IPMI_Chassis.inc
+##### Test Area End
+
+#<Include>	Reset_all_slots.inc
+ <Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	hd_boot_imc.inc
+
+<Sleep>		20
+
+<Include>	Wait_Card_Stoke.inc
+
+
+<Include>   HA_Switchover.inc
+
+<Include>	Show_Card_Stoke.inc
+
+<Include>	Show_Env_Stoke.inc
+
+<Include>	Check_Software_version.inc
+
+<Include>	Show_Mem_Stoke.inc
+<Include>   Ship_config.inc
+<Include> 	Configuration_test.inc
+<Include>	Enable_ISSU.inc
+<Include>	Check_Software_version.inc
+
+<Include>	Clean_IMC_drives.inc
+<Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>	Swap_cons
+			<Include>	Clean_IMC_drives.inc
+			<Exec>	Swap_cons
+</Bypass>
+
+
+<Include>	Check_Log_Alarm.inc
+<Include>	Check_Log_Error.inc
+<Include>   Show_Ship_config.inc
+#<Msg>		"Show_Env_Alarm_Stoke.inc Bypassed for development"
+<Include>	Show_Env_Alarm_Stoke.inc
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<Exec>		Print_Config_Data
+<End>

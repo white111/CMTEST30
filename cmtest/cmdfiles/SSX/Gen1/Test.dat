@@ -1,0 +1,73 @@
+################################################################################
+#
+# Module:      Test.dat
+#
+# Author:      Joe White
+#
+# Descr:      Cmd file for Test telnet
+#
+# Version:    1.0 $Id: Test.dat,v 1.2 2008/02/20 22:03:49 joe Exp $
+#
+# Changes:
+#
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2008 Stoke. All rights reserved.
+#
+################################################################################
+
+#__________________________________________________________________________
+
+<Set>		$Exit_On_Timeout
+<Msg>		"Starting Test ..."
+<Timeout>	10
+<Prompt>	"login: "
+<Msg>		"If this times-out and does NOT get a prompt, make sure the telnet daemon [krb5-telnet] is runing on this system"
+
+<Msg>		"Waiting for login prompt ..."
+<Wait>
+
+<Msg>		"Waiting for password prompt ..."
+<Prompt>	"Password for mfg:"
+<Send>		mfg
+<Wait>
+
+<Prompt>	"]>"
+<Send>		mfg4me
+<Wait>
+
+#___________________________________________________________________________
+
+<Msg>		"We're in ..."
+<UnSet>		$Exit_On_Timeout
+
+<Power>		ON
+<Sleep>		2
+<Power>		OFF
+
+<Sleep>		2
+<Power>		ON
+<Sleep>		2
+
+<Msg>		"Testing Ask ..."
+#<Ask>		Text16  User_ID "Please enter your userID"
+<Msg>		"Testing Ctrl-A ..."
+#<Ctrl-Send>	A
+<Msg>		"Starting loop..."
+<Loop>		30
+  <Msg>		"Dir list ..."
+  <Send>	"ls -l ."
+  <Wait>
+  <GetData>
+  <Sleep>	5
+</Loop>
+
+<Power>		OFF
+
+<End>
+
+
+
+

@@ -1,0 +1,76 @@
+################################################################################
+#
+# Module:      Chassis_Config.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis configuration test
+#
+# Version:    3.7 $Id: Chassis_Config.dat,v 1.21 2011/01/21 18:38:55 joe Exp $
+#
+# Changes:    Added Check IPMI_Chassis.inc 02/16/06
+#			  Added MC and GLC memory checks 05/18/06
+#			 01/30/08 Added Check Disco
+#			  Added Configuration_test.inc  8/21/08
+#			 2/13/09 Booting from HD only
+#			  3/12/09 Moved Show Ship Config last possible step
+#			 Added Chassis test 7/20/09
+#			 Forced Fan speed to low for Fan test start
+#            Reset all slots after chassis test to see if diag bug
+#              causing boot on secondary flash 11/06/09
+#			 Added Stop On fail
+#			 06/3/10 Added First boot of Dual IMC
+#			 07/14/10 Added packet gap change for intermittent trafic failures(same as BI)
+#			 01/14/11 Added Potentia/Psoc checks
+#
+# Includes:  Check_POST_IMC.inc
+#			 tftp_boot_imc_diag.inc
+#			 check_fabric.inc
+#			 Internal_Snake_setup.inc
+#			 tftpcopy_stoke_config.inc
+#		 	 Show_Card_Stoke.inc
+#		 	 Update_all.inc
+#		 	 Show_Card_Stoke.inc
+#			 Show_Env_Stoke.inc
+#			 Check_Software_version.inc
+#			 Clean_IMC_drives.inc
+#			 Show_Env_Alarm_Stoke.inc
+#			 Check_IPMI_Chassis.inc
+#			 format_IMC_drives40gig.inc
+#
+# Still ToDo:
+#              - Fix intermmittent Traffic failures
+#              - Add memory test on commands
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+#<Msg>		"Turning off UUT Power ..."
+#<Power>		OFF
+<Sleep>		5
+#<Exec>		Init_HA_Port
+<Prompt>	"Stoke[local]"
+<timeout>		90
+<Send>
+<loop>		43200
+<Msg>		"Turning on UUT Power ..."
+<Prompt>	"Stoke[local]"
+<timeout>		120
+<Power>		ON
+<wait>
+<CheckDataX>	"FAIL"
+<CheckDataX>	"ERROR"
+<CheckDataX>   "Crash"
+<Send>		"reload"
+<prompt>    "yes"
+
+<wait>
+<Prompt>	"Stoke[local]"
+<Send>       "y"
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<Sleep>		5
+</loop>
+<End>

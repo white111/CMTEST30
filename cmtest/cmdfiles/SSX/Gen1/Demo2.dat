@@ -1,0 +1,35 @@
+################################################################################
+#
+# Module:      Demo2.dat
+#
+# Author:      Joe White
+#
+# Descr:       Demo2.dat
+#
+# Version:    1.1 $Id: Demo2.dat,v 1.2 2008/02/20 22:03:49 joe Exp $
+#
+# Changes:
+#
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2006 Stoke. All rights reserved.
+#
+################################################################################
+# Cmd file for demo2 UUT Emulator
+#__________________________________________________________________________
+
+<Timeout>	200
+
+<Msg>		"Starting Demo ..."
+<Send>		"me>"
+
+<Wait>
+Send>		"me>"
+
+<End>
+
+
+
+

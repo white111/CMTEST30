@@ -1,0 +1,14 @@
+# .bashrc
+
+# Add to '' section ...
+
+#----<cut here>------
+
+# CMTest variable declarations
+
+File="/usr/local/cmtest/.cmtestrc"
+if [ -f $File ]; then
+	. $File
+fi
+
+#----<end cut>------

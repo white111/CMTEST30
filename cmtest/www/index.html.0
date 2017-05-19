@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+ <HEAD>
+  <TITLE>Stoke - Automated Manufacturing Home Page</TITLE>
+ </HEAD>
+<!-- Background white, links blue (unvisited), navy (visited), red (active) -->
+ <BODY BACKGROUND="Stoke4.gif">
+
+  <H1 ALIGN="CENTER">Stoke - Automated Manufacturing Test</H1>
+  This page contains links to the status screens and data query tools used by
+  the Manufacturing Operations group and our Contract Manufacturer.
+
+  <HR WIDTH="50%">
+  <H2 ALIGN="CENTER">Production Status</H2>
+
+  <P><A href="cgi-bin/summary.cgi" CLASS="standard-b-noline"><STRONG>Summary</A>
+         - Show the production floor test activity in summary form</STRONG></P>
+  <P><A href="cgi-bin/status.cgi" CLASS="standard-b-noline"><STRONG>Active/Recent Tests</A>
+         - Show  but only for active tests, or ~hr old</STRONG></P>
+  <P><A href="cgi-bin/status_all.cgi" CLASS="standard-b-noline"><STRONG>All Tests</A>
+         - Show detailed view for all remaining records</STRONG></P>
+
+  <HR WIDTH="50%">
+  <H2 ALIGN="CENTER">Test Data Search</H2>
+
+  <P><A href="cgi-bin/event_query.cgi" CLASS="standard-b-noline"><STRONG>Event Log Query</A>
+         - Search for Test Events in the master log</STRONG></P>
+
+  <P><STRONG>Cfg Log Query</STRONG> (Under development) </P>
+
+  <HR WIDTH="50%">
+  <H2 ALIGN="CENTER">Documentation</H2>
+
+  <P><A href="docs/User_Guide.doc" CLASS="standard-b-noline"><STRONG>User Guide</A>
+        -  (MS Word) (Under development) </P>
+  <P><STRONG>Installation Guide</STRONG> (Under development) </P>
+  <P><STRONG>Programmers Guide</STRONG> (Under development) </P>
+
+  <HR WIDTH="50%">
+
+  <P>
+  These tools are currently under development. Please check back regularly!
+  </P>
+
+  <P>
+  For issues relating to content of this web page, please contact:
+  <a href="mailto:Paul@Tindle.org">Paul Tindle (Consultant)</a>
+  </P>
+
+  <P ALIGN="CENTER">
+  <A HREF="http://www.apache.org/"><IMG SRC="/icons/apache_pb.gif" ALT="[ Powered by Apache ]"></A>
+ </BODY>
+</HTML>

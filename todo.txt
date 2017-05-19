@@ -1,0 +1,9 @@
+1) Check in each test for alarms being caught
+2) Check for valid serial number in Stoke OS no unkown serial
+3)    #&Log_Error("Failed to get XML Tag data for $SN[0]\n") if $Tag_data_count eq 0;
+		Failing Why? now
+4) Rework Final and COnfig Alarm card test ( Function change as of 4.3)
+5) Fex issues with flow control
+6) Check Software version only checking IMC, Check all slots
+7) Can no do HA in a loop
+

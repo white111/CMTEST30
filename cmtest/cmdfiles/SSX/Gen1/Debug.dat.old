@@ -1,0 +1,219 @@
+################################################################################
+#
+# Module:      Chassis_Config.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis configuration test
+#
+# Version:    2.4 $Id: Debug.dat,v 1.16 2009/05/07 15:50:10 joe Exp $
+#
+# Changes:    Added Check IPMI_Chassis.inc 02/16/06
+#			  Added MC and GLC memory checks 05/18/06
+#			  Work in progress for 3.0 HA release
+#			  Added Configuration_test.inc  8/21/08
+#			  Added ISSU enable 1/14/08
+#			 2/13/09 Booting from HD only
+#			  3/12/09 Moved Show Ship Config last possible step
+#
+# Includes:  Check_POST_IMC.inc
+#			 tftp_boot_imc_diag.inc
+#			 check_fabric.inc
+#			 Internal_Snake_setup.inc
+#			 tftpcopy_stoke_config.inc
+#		 	 Show_Card_Stoke.inc
+#		 	 Update_all.inc
+#		 	 Show_Card_Stoke.inc
+#			 Show_Env_Stoke.inc
+#			 Check_Software_version.inc
+#			 Clean_IMC_drives.inc
+#			 Show_Env_Alarm_Stoke.inc
+#			 Check_IPMI_Chassis.inc
+#
+# Still ToDo:
+#              - Fix intermmittent Traffic failures
+#              - Add memory test on commands
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+<Msg>		"Debug ..."
+#<Power>		OFF
+<Sleep>		5
+<Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>     $Exit_On_Timeout
+
+ <Msg>		"Set Stop On Error"
+
+<Set>    	$Exit_On_Error
+<Set>		$Exit_On_Timeout
+<Set>		$Slot_INST_1_GBL
+<Set>		$Slot_INST_2_GBL
+<Set>		$Slot_INST_3_GBL
+<Set>		$Slot_INST_4_GBL
+
+ <Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>    $Exit_On_Timeout
+ <Msg>		"Turning on UUT Power ..."
+ <Power>		ON
+
+#<Loop>		23000
+<Loop>		43200
+
+ <Msg>		"Turning on UUT Power ..."
+ <Power>		ON
+<Include>	Stop_stoke_bootloader.inc
+
+<Msg>		"HD/CFINT Booting Diags..."
+<TimeOut>	2
+<Prompt>	"Stoke-BootLoader#"
+#<Send>		'setenv ethaddr 00:12:73:FF:2:10'
+#<Wait>
+<Sleep>		5
+<TimeOut>   30
+<Sendslow>		"boot image file /hd/stoke.bin"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+<Sleep>		7
+<TimeOut>	90
+<Send>		'go'
+<Prompt>	'#'
+
+<TimeOut>	150
+<Prompt>	'#'
+<Wait>
+<GetData>
+<CheckData>	'booting '
+#<CheckData>	'Welcome to Stoke's Command Line Interface'
+<CheckDatax> 'Failed'
+<CheckDatax> 'Restarting devb-mvSata'
+<TimeOut>	90
+<Send>		'terminal length infinite'
+<Wait>
+<GetData>
+<Sleep>		30
+#<Include>   Wait_Card_Stoke_temp.inc
+# Done at the Noodle level
+<Prompt>	"Stoke[local]#"
+<Send>
+<Wait>
+<TimeOut>	120
+<Send>		"terminal length infinite"
+<Wait>
+<Msg>		"Show Cards"
+<Send>		"show card"
+<Waitfor>	"Slot"
+<Wait>
+<GetData>
+<Prompt>	'Stoke[local]'
+<Msg>		'Drop to QNX Shell...'
+<TimeOut>	5
+<Exec>		Getmytime
+<Send>		'hidden enable 2'
+<WaitFor>	'Password:'
+#hard coded password
+<Send>		2033
+<Wait>
+<GetData>
+<Prompt>	'#'
+<Send>		'start shell'
+<Wait>
+<GetData>
+#		Timeout after 3 minutes of waiting for card
+<send> 'integer long mytime=`date -t`+(60*3)'
+<wait>
+<GetData>
+<TimeOut>	190
+#cmd  wait for LCMgr message in glc log for x seconds, print timeout if not found in that time
+#<Send>	'echo -n Waiting;while  (  ( ! (grep -q "LcMgr Started" /hdp/glc-console-1) && ((${mytime} > (`date -t`))) ) )    do  ( if ((${mytime} <= ((`date -t`)+2))) then (echo Wait TIMEOUT) fi ; sleep 2; echo -n .) done; echo'
+
+#<Bypass>	$Slot_INST_1_IMC_GBL
+#Added to insure card in slot 0 starts as Master if a IMC is installed in slot 1
+# The following is needed when IMCs move to a new chassis
+# Ch Ser# is stroed in IMC NVRAM, if no match IMC slot 0   will start in standby
+# We need the IMC in slot 0 to be master
+#<Bypass>    $Slot_INST_1_IMC_GBL
+#            <Send> "pfeffa on 1 reset bo"
+#            <Wait>
+#</Bypass>
+<prompt>	"^#"
+#</Bypass>
+<Bypass>	$Slot_INST_1_GLC_GBL
+            <Msg>	"Wait for GLC Slot 1 startup"
+			<SendSlow>	'echo -n Waiting;while  (  ( ! (grep -q "IPC Connection to CardMgr available" /hdp/glc-console-1) && ((${mytime} > (`date -t`))) ) )    do  ( if ((${mytime} <= ((`date -t`)+2))) then (echo Wait TIMEOUT) fi ; sleep 2; echo -n .) done; echo'
+			<wait>
+			<CheckDatax>	"TIMEOUT"
+			<GetData>
+</Bypass>
+<Bypass>	$Slot_INST_2_GBL
+            <Msg>	"Wait for GLC Slot 2 startup"
+			<SendSLow>	'echo -n Waiting;while  (  ( ! (grep -q "IPC Connection to CardMgr available" /hdp/glc-console-2) && ((${mytime} > (`date -t`))) ) )    do  ( if ((${mytime} <= ((`date -t`)+2))) then (echo Wait TIMEOUT) fi ; sleep 2; echo -n .) done; echo'
+			<wait>
+			<CheckDatax>	"TIMEOUT"
+			<GetData>
+</Bypass>
+<Bypass>	$Slot_INST_3_GBL
+            <Msg>	"Wait for GLC Slot 3 startup"
+			<SendSlow>	'echo -n Waiting;while  (  ( ! (grep -q "IPC Connection to CardMgr available" /hdp/glc-console-3) && ((${mytime} > (`date -t`))) ) )    do  ( if ((${mytime} <= ((`date -t`)+2))) then (echo Wait TIMEOUT) fi ; sleep 2; echo -n .) done; echo'
+			<wait>
+			<CheckDatax>	"TIMEOUT"
+			<GetData>
+</Bypass>
+<Bypass>	$Slot_INST_4_GBL
+            <Msg>	"Wait for GLC Slot 4 startup"
+			<SendSlow>	'echo -n Waiting;while  (  ( ! (grep -q "IPC Connection to CardMgr available" /hdp/glc-console-4) && ((${mytime} > (`date -t`))) ) )    do  ( if ((${mytime} <= ((`date -t`)+2))) then (echo Wait TIMEOUT) fi ; sleep 2; echo -n .) done; echo'
+			<wait>
+			<GetData>
+			<CheckDatax>	"TIMEOUT"
+</Bypass>
+<Send>		'integer long mytimetotal=${mytime}-`date -t`'
+<Wait>
+<Send>		'echo GLC remaining GLC startup time ${mytimetotal}'
+<Wait>
+<GetData>
+<Msg>		'echo Waiting 120 Seconds for Polling'
+<Send>		'echo Waiting 120 Seconds for Polling'
+
+<Wait>
+<Sleep>		120
+
+
+<Send>
+<Wait>
+<Timeout>	5
+<Prompt>	"Stoke[local]#"
+<Send>		"exit"
+<Wait>
+
+# End wait card temp
+<Include>   Ship_config.inc
+#<Include>   Check_Software_version.inc
+
+<Msg>       "Reload-Shutting down system..."
+<Prompt>   "Stoke[local]#"
+<send>     "exit"
+<wait>
+<Msg>       "Shutting down system..."
+<Timeout>   60
+<Prompt>    "Proceed"
+<Send>      "reload"
+<wait>
+<Prompt>    "Initializing Network Hardware..."
+<Send>      "y"
+<sleep>     1
+<Send>      "y"
+<Wait>
+<Power>		OFF
+<Sleep>		5
+
+# <Send>     "reset"
+ <Sleep>        5
+</Loop>
+
+<Power>		OFF
+<Sleep>		5
+<End>

@@ -1,0 +1,210 @@
+################################################################################
+#
+# Module:      parts.cfg
+#
+# Author:      Joe White
+#
+# Descr:       Allowed serial number series and revisions
+#
+# Version:   1.15  $Id: parts.cfg,v 1.18.2.5 2012/02/10 04:39:03 joe Exp $
+
+#
+# Changes:    Added Versioning
+#			  061008 Updated C00216
+#			  082408 Updated C00224
+#			  101708 Updated C00230
+#			  111808 Updatec C00196,C00236
+#			  060209 Update for C00228
+#			  11/2009 update c00246, C243
+#             12/18/09 Update C00238,C00247
+#			  03/19/10 Update for C00257,260
+#			  07/19/10 Update for C00262
+#			  081710 C00269,C00270 revision added
+#			  050211 C00303,C00298,c00296,c00297 - 2nd sourcs chassis
+#			  052511 C00310 Add released PSOC ES3
+#			  Add obsolete revisions for India Repair 5/26/11
+#			  6/10/11 ECO_C00314
+#			  07/20/11 ECO C00307 Alarm
+#			  7/21/11 00315-05_Rev_03  = ECO_C00317
+#			  8/22/11 ECO C00319,C00321
+#			  11/29/11 ECO C0333
+#			  12/19/11 00722-14_Rev_04  = ECO_C00337_Production
+#			  04/11/12  C00333,348 ,343, 346
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2012 Stoke. All rights reserved.
+#
+################################################################################
+
+# load the hash %partnumber ...
+# was /usr/local/cmtest/parts.cfg , partnumber in cmtest 1.5x and below
+[partnumber_lookup]
+
+001	= 00002
+002	= 00292
+003	= 00295
+004	= 00293
+005	= 00294
+006	= 00375
+007	= 00315
+008	= 00301
+009	= 00299
+010	= 00297
+011	= 00648
+012 = 00658
+013 = 00722
+022 = 01321
+021 = 01321
+
+
+# Requires cmtest 1.6.x or above
+[allowed_partnumber_rev]
+#partnumber = ECO/DV#
+00002-02_Rev_X5  = ECO_C00052
+00002-02_Rev_02  = ECO_C00051
+00002-03_Rev_01  = ECO_C00048
+00002-04_Rev_01  = ECO_C00057
+00002-04_Rev_03  = Flex_test
+
+00292-01_Rev_X1  = ECO_C00053
+00292-02_Rev_01  = ECO_C00035
+00292-03_Rev_01  = ECO_C00049
+#00292-04_Rev03	=  ECO_C00080 - Changed to 00292-05_Rev_02  = ECO_000102
+00292-05_Rev_02  = ECO_C00102 Obsolete
+00292-05_Rev_02  = ECO_C00102
+#00292-05_Rev_03  = ECO_C00131 Obsoleted by ECO C000152
+#00292-05_Rev_04  = ECO_C00152 Obsoleted by C00167
+00292-05_Rev_05  = ECO_C00167
+00292-06_Rev_01  = ECO_C00116
+#00292-07_Rev_01  = ECO_C00156_Preliminary Obsoleted by C00167
+#00292-07_Rev_01  = ECO_C00167_Preliminary , Obsoleted by ECO C00178
+00292-08_Rev_01  = ECO_C00178
+00292-09_Rev_02  = ECO_C00216
+00292-09_Rev_05  = ECO_C00230_DV00127
+00292-10_Rev_01  = ECO_C00228
+00292-11_Rev_01  = ECO_C00243
+00292-11_Rev_02  = ECO_C00270_Production
+#00292-12_Rev_01  = ECO_C00280_Prototype obsolete
+00292-13_Rev_01  = ECO_C00286_Production
+00292-14_Rev_01  = ECO_C00310_Production
+00292-14_Rev_02  = ECO_C00319_Production
+00292-14_Rev_03  = ECO_C00348_Production
+
+00295-01_Rev_X2  = ECO_C00015
+00295-02_Rev_01  = ECO_C00039
+00295-03_Rev_01  = ECO_C00049
+00295-04_Rev_01  = ECO_C00056 Obsoleted by ECO C000152
+00295-04_Rev_02  = ECO_C00152
+00295-05_Rev_01  = ECO_C00116
+00295-08_Rev_02  = ECO_C00216
+00295-08_Rev_03  = ECO_C00230_Production
+
+00293-01_Rev_X2  = ECO_C00056
+00293-02_Rev_01  = ECO_C00039
+00293-03_Rev_01  = ECO_C00056
+#00293-04_Rev_01  = ECO_C00057 Obsoleted by ECO C000152
+00293-04_Rev_02  = ECO_C00152
+00293-05_Rev_01  = ECO_C00116
+00293-06_Rev_02  = ECO_C00216
+00293-06_Rev_03  = ECO_C00230_Production
+00293-07_Rev_01  = ECO_C00228_Production
+
+# no support for Fic LC14
+#00294-01_Rev_01  = ECO_C00057
+
+00375-01_Rev_01  = ECO_C0005003017_Rev_X3_in_Agile
+#00375-02_Rev_02  = ECO_C00056 Obsoleted by ECO C000152
+00375-02_Rev_03  = ECO_C00152
+00375-04_Rev_01  = ECO_C00116
+00375-05_Rev_02  = ECO_C00216
+00375-05_Rev_04  = ECO_C00230_Production
+#00375-05_Rev_05  = ECO_C00228_Production Obsolete by C00246
+#00375-05_Rev_06  = ECO_C00243_Production Obsolete by C00246
+00375-05_Rev_07  = ECO_C00246_Production_DV00147
+00375-05_Rev_08  = ECO_C00248_Production
+00375-05_Rev_09  = ECO_C00348_Production
+
+
+00315-01_Rev_01  = ECO_C000??
+00315-01_Rev_02  = ECO_C00058
+00315-01_Rev_03  = ECO_C00082
+00315-01_Rev_04  = ECO_C00110
+#00315-02_Rev_01  = ECO_C00135  Obsoleted by C00187
+00315-02_Rev_02  = ECO_C00187
+#00315-03_Rev_01  = ECO_C00180 Obsoleted by C00187
+00315-03_Rev_02  = ECO_C00187
+00315-03_Rev_03  = ECO_C00196
+00315-03_Rev_04  = ECO_C00247
+00315-03_Rev_05  = ECO_C00260
+00315-03_Rev_06  = ECO_C00290
+00315-05_Rev_02  = ECO_C00303
+00315-05_Rev_03  = ECO_C00317
+00315-05_Rev_04  = ECO_C00350
+00315-06_Rev_01  = ECO_C00333
+00315-06_Rev_02  = ECO_C00350
+
+00301-06_Rev_01  = ECO_C00082
+#00301-05_Rev_02  = ECO_C00103 Obsoleted bt C00172
+#00301-05_Rev_04  = ECO_C00172  Obsoloted by C00187
+00301-08_Rev_01  = ECO_C00187
+00301-12_Rev_01  = ECO_C00236_DV00130
+00301-12_Rev_02  = ECO_C00238
+00301-13_Rev_03  = ECO_C00298
+00301-13_Rev_04  = ECO_C00307_C00313
+
+00299-05_Rev_01  = ECO_C00082
+#00299-04_Rev_02  = ECO_C00105 Obsoleted by C000172
+00299-04_Rev_03  = ECO_C00172
+#Following is a phase in for next build
+00299-04_Rev_04  = ECO_C00183
+00299-06_Rev_03  = ECO_C00296
+00299-06_Rev_04  = ECO_C00314
+00299-06_Rev_05  = ECO_C00343
+
+00297-05_Rev_01  = ECO_C00082
+#00297-04_Rev_02  = ECO_C00105  Obsoleted by ECO_C00172
+00297-04_Rev_04  = ECO_C00172
+00297-06_Rev_03  = ECO_C00295_DV00169
+00297-06_Rev_04  = ECO_C00314
+00297-06_Rev_05  = ECO_C00343
+
+#GLC 4-port
+00648-01_Rev_05  = ECO_C00212_obsolete
+00648-01_Rev_06  = Flex_test
+00648-02_Rev_07  = ECO_C00212_obsolete
+00648-04_Rev_03  = ECO_C00212_obsolete
+00648-05_Rev_03  = ECO_C00212_obsolete
+
+#GLC2 4 Port
+00722-01_Rev_08  = ECO_C00212_obsolete
+00722-02_Rev_05  = ECO_C00212_obsolete
+00722-04_Rev_09  = ECO_C00212_obsolete
+00722-05_Rev_04  = ECO_C00224_Prototype_DV00122
+00722-05_Rev_05  = ECO_C00230_Production
+#1gig
+#00722-06_Rev_01  = ECO_C00212_Production
+#2gig
+00722-07_Rev_01  = ECO_C00217_Production
+00722-08_Rev_01  = DV00128
+00722-09_Rev_01  = ECO_C00228
+00722-10_Rev_01  = ECO_C00243
+00722-10_Rev_02  = ECO_C00262
+00722-10_Rev_03  = ECO_C00269_Production
+#00722-12_Rev_01  = ECO_C00277_Obsolete
+00722-13_Rev_02  = ECO_C00281_Pilot
+00722-14_Rev_01  = ECO_C00310_Production
+00722-14_Rev_02  = ECO_C00319_Production
+00722-14_Rev_03  = ECO_C00321_Production
+00722-14_Rev_04  = ECO_C00337_Production
+
+#Single slot Backplane
+00658-01_Rev_03  = ECO_C00078
+
+#XGLC
+01321-04_Rev_01 = Development_A2_1600Mhz
+01321-04_Rev_02 = Development_A2_1600Mhz
+01321-05_Rev_01 = Devlopment_B0_1400_1600Mhz
+01321-06_Rev_04 = C00346_Pilot_B0_1400Mhz
+02041 = Development_1600MHZ

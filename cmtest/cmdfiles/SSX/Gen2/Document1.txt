@@ -1,0 +1,131 @@
+
+<Include>	Check_Potentia.inc
+<Include>	Update_all.inc
+#<Include>	Reboot_test.inc
+<Include>	check_fabric.inc
+
+<Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>     $Exit_On_Timeout
+
+ <Msg>		"Set Stop On Error"
+
+<Set>    	$Exit_On_Error
+<Set>		$Exit_On_Timeout
+
+ <Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>    $Exit_On_Timeout
+
+
+#Flash update causing instability
+<Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	cfint_boot_diag.inc
+
+<Sleep>		20
+
+<Include>   Set_Fan_Speed.inc
+<Msg>	"Setting new interpacekt gap"
+#1) pfeffa r8 f1002c3c => F
+#2) pfeffa w8 f1002c3c E  (Disable port 2)
+#3) pfeffa r8 f1002c0c => 6
+#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+#5) pfeffa w8 f1002c3c F (Enable port)
+<Send>		"pfeffa r8 f1002c3c"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c E"
+<Wait>
+<Send>		"pfeffa r8 f1002c0c"
+<Wait>
+<Send>		"pfeffa w8 f1002c0c 7"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c F"
+<Wait>
+<Include>   Internal_Snake_setup.inc
+<Include>   Clear_Disco.inc
+<Include>  Onscript_Start_BI.inc
+<Include>   BI_loopbacktest.inc
+<Include>  Onscript_Check.inc
+<Include>   Check_Disco.inc
+<Include>   Onscript_Start.inc
+<Include>   Onscript_Check.inc
+<Include>   Check_HDP_Log_Error.inc
+<Include>   Check_Disco.inc
+<Include>   Check_5th_link.inc
+
+
+
+# Moved to End, HA load this causes problems with GLC mounts
+<Include>	Check_IPMI_Chassis.inc
+
+
+#<Include>	Reset_all_slots.inc
+
+
+ <Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	hd_boot_imc.inc
+
+<Sleep>		20
+
+<Bypass>	$HA_Session
+		<Msg>	"Checking Standby IMC"
+		<Exec>	Swap_cons
+		<Prompt> "Stoke[local]-STANDBY#"
+		<Send>
+		<Wait>
+		<GetData>
+		<Exec>	Swap_cons
+		<Prompt> "Stoke[local]#"
+</Bypass>
+
+<Include>	Wait_Card_Stoke.inc
+#<Msg>		"Wait 120 Sec for cards to come ready"
+#<Sleep>		120
+<Include>   Ship_config.inc
+<Include> 	Configuration_test.inc
+<Include>	Show_Card_Stoke.inc
+<Include>	Check_Log_Error.inc
+<Include>   HA_Switchover.inc
+<Include>	Check_Software_version.inc
+<Include>	Show_Mem_Stoke.inc
+
+
+
+
+#<Msg>       "Trigger breakers, Both pems should be powered off"
+#<Include>   Shell_imc.inc
+#<Msg>       "Bypassed Breaker turnoff"
+##<Send>     "pfeffa w8 f4000042 1"
+#<Sleep>     1
+#<Send>
+#<Msg>       "Check system is powered off"
+#<GetData>
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+
+<End>

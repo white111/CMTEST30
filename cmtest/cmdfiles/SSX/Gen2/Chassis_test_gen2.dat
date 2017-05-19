@@ -1,0 +1,142 @@
+################################################################################
+#
+# Module:      Chassis_Test.inc
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for GLC 2 and 4 Port test
+#
+# Version:    1.4 $Id: Chassis_test.dat,v 1.5.4.1 2011/08/19 15:18:37 joe Exp $
+#
+# Changes:    Created 02/06/13
+#
+# Includes:
+#
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2013 Stoke. All rights reserved.
+#
+################################################################################
+
+
+
+<Prompt>	">"
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+<Include>	Stop_stoke_boot.inc
+
+#If we boot to noodle
+<Msg>		"Verify at Stoke>>.."
+<TimeOut>	1
+<Send>		""
+<WaitFor>	"Stoke>>"
+
+<Prompt>	">"
+<TimeOut>	5
+<Msg>		"Starting Noodle..."
+<Send>		"go ffe00100"
+<Wait>
+
+# If we boot full image
+#<Prompt>	">"
+#<TimeOut>	5
+#<Msg>		"Starting Noodle..."
+#<Send>		"pfeffa"
+#<Wait>
+
+
+# For some reason, this is required - UUT timing problem
+<Send>
+<Wait>
+
+<Msg>		"Check Slot ID..."
+<Send>
+<Wait>
+<GetData>
+<CheckData>	"slot 0"
+
+<Msg>		"Test Voltages..."
+<Send>		"test volt"
+<Wait>
+<GetData>
+<CheckData>	PASS
+
+
+<Msg>		"Checking DC voltages ..."
+<Send>		"show volt"
+<Wait>
+<GetData>	Volts
+
+<Msg>		"Slow Fans"
+<Msg>		"Slow Fans"
+<Send>		"wr i2c 9501 fan1 gpio 47"
+<Waitfor>	">"
+<Send>		"wr i2c adm1029 1 60 55"
+<Waitfor>	">"
+<Send>		"wr i2c 9501 fan2 gpio 47"
+<Waitfor>	">"
+<Send>		"wr i2c adm1029 2 60 55"
+<Waitfor>	">"
+<Send>		"set verb 1"
+<Waitfor>	">"
+<Timeout>	10
+<Msg>		"Check if on IPMI A"
+<Send>		"r8 f400001f"
+<Waitfor>	"F400001F   09"
+<GetData>
+
+<Send>		"set verb 0"
+<Waitfor>	">"
+<Msg>		"Get System serial numbers"
+<Timeout>	60
+<Sendslow>		"show mfg;rd i2c 9501 chassis tlv 8"
+<Wait>
+<GetData>	ShowMFG
+<Send>		"set verb 1"
+<Waitfor>	">"
+#Check IMC local eeprom for tlv 99 eq P20_NOT_INSTALLED -> 50 32 30 5F 4E 4F 54 5F 49 4E 53 54 41 4C 4C 45
+#Set Chassis installed to 0 if P20_NOT_INSTALLED string not found
+<Msg>		"Check if P20 Connector installed"
+<Send>		"rd i2c u67 tlv 99"
+<Wait>
+<GetData>	Check_Chassis_FRU_TEST
+<Send>		"rd i2c u67 tlv 10"
+<Wait>
+<GetData>	Check_Chassis_FRU_TEST
+
+
+#<Msg>		"Bypassed IPMI test for development"
+<Include>	Check_IPMI_Chassis.inc
+
+#<Prompt>	">"
+<TimeOut>	5
+#<Msg>		"Starting Noodle..."
+#<Send>		"pfeffa"
+#<Wait>
+<Prompt>	"^slot ..>"
+#<Send>
+#<Wait>
+<Include>	Chassis_test_Fan_gen2.inc
+<Include>	Chassis_test_Fan_TACH_gen2.inc
+<Include>	Chassis_test_Alarm.inc
+<Include>	Chassis_test_Pem.inc
+<Send>
+<Wait>
+
+<Msg>		"Trigger PEM Breakers"
+<Send>		"w8 f4000042 1"
+<Sleep>		1
+<Send>
+#<Wait> No Wait, power should be off
+<Getdata>	Verify_Chassis_LED_All_POWER_OFF
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<Exec>               Print_ShowMFG_Data
+
+<END>
+

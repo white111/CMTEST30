@@ -1,0 +1,73 @@
+################################################################################
+#
+# Module:      Bench.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench.dat,v 1.1 2011/12/12 22:54:26 joe Exp $
+#
+# Changes:    Created from Bench.dat  092811
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+#  Jumper Selection
+#	J39, J40 Open (SPI bus) SPI funtion not implemented
+#    J41 Diag 2 open
+#    J36 Jumper installed  Same function as IMC GLC
+#    J39 + J41 installed forces to Flash Bank X not verified
+#	 J40 + J41 installed forces to Flash Bank X not verified
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_boot.inc
+<Msg>		$Bench_card_type_gbl
+<Include>	${Bench_card_type_gbl}
+#<Include>	Bench_XGLC.inc
+#<Include>	Bench_Prog_XGLC.inc
+
+<Msg>		"Turning off UUT Power ..."
+
+<power>		OFF
+<Sleep>		5
+
+
+<loop>		43200
+#  Jumper Selection
+#	J39, J40 Open (SPI bus) SPI funtion not implemented
+#    J41 Diag 2 open
+#    J36 Jumper installed  Same function as IMC GLC
+#    J39 + J41 installed forces to Flash Bank X not verified
+#	 J40 + J41 installed forces to Flash Bank X not verified
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_boot.inc
+<Msg>		$Bench_card_type_gbl
+<Include>	${Bench_card_type_gbl}
+#<Include>	Bench_XGLC.inc
+#<Include>	Bench_Prog_XGLC.inc
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<Sleep>		5
+</loop>
+
+<End>
+
+
+

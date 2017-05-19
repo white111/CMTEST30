@@ -1,0 +1,65 @@
+<hash>:	FMEA	Error
+
+# File I/O Errors:
+
+1	0	Can't open file for write
+2	0	Can't find/open file to read
+3	0	Can't open log file to cat
+4	0	Error rotating log files
+5	0	Unable to create Test Log directory
+6	0	Unable to assign Test Log file
+7	0	Can't create log file
+8	0	Can't access Stats file
+9	0	Unable to touch (create) file
+10	0	Unable to delete file
+11	0	Error opening IPC data file
+
+# Data Errors:
+
+21	0	Missing required parametric data from test.cfg file
+22	0	Required directory doesn't exist
+23	0	Data does not conform to spec format
+24	0	Unrecognized var defined in test.cfg
+25	0	Missing data in command file
+26	0	No command file specified
+27	0	Specified command file not found
+28	0	Attempt to use UUT_IP address outside of defined range
+
+# Connection Errors:
+
+31	0	Did not get a response from the Comm exec
+32	0	Command timed out
+
+# Sub call Errors:
+
+101	0	Invalid switch
+102	0	Missing command line switch
+103	0	Invalid -R <Result> passed as command line switch
+104	0	Invalid -P <Part No> passed as command line switch
+105	0	Invalid -S <Serial No> passed as command line switch
+106	0	Ambiguous use of command line switches
+
+110	0	Function not available on this platform
+
+120	0	System call returned an Error
+
+198	0	PETC Abort
+199	0	Operator requested abort
+
+# 2xx -	Informational [non-] Errors:
+
+201	0	Daemon already running
+
+
+# APC Control Errors:
+
+400	0	Timed out trying to connect to APC power control
+401	0	Refused connection to APC power control
+402	0	APC power box not available (already in use)
+404	0	Invalid port or command number
+
+# Coding errors:  [ Errors requiring a code change to fix, not operator or UUT use!]
+
+901	0	Missing [required] argument to sub-routing
+999	0	General coding error!
+

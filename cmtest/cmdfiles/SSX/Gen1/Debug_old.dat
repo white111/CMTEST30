@@ -1,0 +1,303 @@
+################################################################################
+#
+# Module:      Bench.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Debug.dat,v 1.21 2011/05/26 19:31:26 joe Exp $
+#
+# Changes:    Created from Bench_IMC.dat  10/19/06
+#
+# Includes:  Check_POST_IMC.inc
+#			 Show_IMC_Cpld.inc
+#			 i2c_scan_imc.inc
+#			 check_thermal.inc
+#			 tftp_boot_imc_diag.inc
+#			 format_IMC_drives.inc
+#			 Check_IMC_PCI_V.inc
+#			 Check_Disco_imc.inc
+#            Check_IMC_drives.inc
+#			 tftpcopy_stoke.inc
+#			 cfint_boot_imc.inc
+#			 Bench_Test_IMC.inc
+#				Check_PCI_V.inc
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2008 Stoke. All rights reserved.
+#
+################################################################################
+
+<TimeOut>	120
+
+#<Msg>    "Check Fail Flags:"
+# <Msg>     $Exit_On_Error
+# <Msg>     $Exit_On_Timeout
+
+# <Msg>      "Set Stop On Error"
+
+#<Set>       $Exit_On_Error
+#<Set>       $Exit_On_Timeout
+
+# <Msg>    "Check Fail Flags:"
+# <Msg>     $Exit_On_Error
+# <Msg>    $Exit_On_Timeout
+<Power>     ON
+     <Prompt>  "Resetting card"
+
+    <Wait>
+    <CheckDataX>  "Restarting devb-mvSata"
+    <Sleep>  1
+
+
+# Moved after CPLD check, so we know the slotnumber
+       # 3 hr 7200 #####################
+       # 12hr 43200
+       # 12hr 86400
+<Prompt>  "#"
+<loop>   86400
+
+        <Msg>		"Rebooting system"
+        <TimeOut>	30
+        <Prompt>  "#"
+       # Clear Boot fail count
+       	<SendSlow> "pfeffa wr i2c 9501 alarm1 gpio a3"
+       	<Wait>
+     <Send>		"pfeffa w8 f400002b 11"
+     <Wait>
+     <Send>		"pfeffa show therm"
+     <Wait>
+     <Send>		"date"
+     <Wait>
+	 <TimeOut>	20
+	 <Prompt>	"^slot ..>"
+	 <Send>		"pfeffa"
+	 <Wait>
+	 # Fans
+	 <Bypass> 	$Slot_INST_GBL[21]
+	<Msg>	"Check Fan 1 GPIO"
+	<Send> "sho fan 1 gpios"
+	<Wait>
+	#<Sleep>	1
+	<Getdata>
+	<Checkdata>	"FAN CARD 1 .on the RIGHT viewed from front. 9501 I/Os = 47"
+	<Sendslow> "rd i2c 9501 fan1 gpio"
+	<Wait>
+
+	<GetData>
+</Bypass>
+
+<Bypass> 	$Slot_INST_GBL[22]
+	<Msg>	"Check Fan 2 GPIO"
+	<Send> "sho fan 2 gpios"
+	<Wait>
+	#<Sleep>	1
+	<Getdata>
+	<Checkdata>	"FAN CARD 2 .on the LEFT viewed from front. 9501 I/Os = 47"
+	<Sendslow> "rd i2c 9501 fan2 gpio"
+	<Wait>
+
+	<GetData>
+</Bypass>
+
+
+	<Msg>	"Check Fan 1 GPIO FF"
+	<Send>	"wr i2c 9501 fan1 gpio ff"
+	<Wait>
+	<Send> "sho fan 1 gpios"
+	<Wait>
+	#<Sleep>	1
+	<Getdata>
+	<Checkdata>	"FAN CARD 1 .on the RIGHT viewed from front. 9501 I/Os = e7"
+	<Sendslow> "rd i2c 9501 fan1 gpio"
+	<Wait>
+
+	<GetData>
+	<Send>	"wr i2c 9501 fan1 gpio 47"
+	<Wait>
+
+	<Msg>	"Check Fan 2 GPIO FF"
+	<Send>	"wr i2c 9501 fan2 gpio ff"
+	<Wait>
+	<Send> "sho fan 2 gpios"
+	<Wait>
+	#<Sleep>	1
+	<Getdata>
+	<Checkdata>	"FAN CARD 2 .on the LEFT viewed from front. 9501 I/Os = e7"
+	<Sendslow> "rd i2c 9501 fan2 gpio"
+	<Wait>
+
+	<GetData>
+	<Send>	"wr i2c 9501 fan2 gpio 47"
+	<Wait>
+
+
+	<Msg>	"Check Fan 1 TACH Speeds"
+	<Msg>	"Fan 1 One fan On, Low Speed"
+	<Send> "wr i2c 9501 fan1 gpio 47"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan1.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 1 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_A_FAN_A_OFF_FAN_B_ON_LOW
+	<Send>	"rd i2c adm 1 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_B_FAN_A_OFF_FAN_B_ON_LOW
+
+	<Msg>	"Fan 1 1 Fan on, High Speed"
+	<Send> "wr i2c 9501 fan1 gpio C7"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan1.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 1 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_A_FAN_A_OFF_FAN_B_ON_HIGH
+	<Send>	"rd i2c adm 1 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_B_FAN_A_OFF_FAN_B_ON_HIGH
+
+
+
+	<Msg>	"Fan 1 2 Fans on, Low Speed"
+	<Send> "wr i2c 9501 fan1 gpio 67"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan1.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 1 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_A_FAN_A_ON_FAN_B_ON_LOW
+	<Send>	"rd i2c adm 1 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_B_FAN_A_ON_FAN_B_ON_LOW
+
+
+
+	<Msg>	"Fan 1 2 Fans on, High Speed"
+	<Send> "wr i2c 9501 fan1 gpio E7"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan1.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 1 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_A_FAN_A_ON_FAN_B_ON_HIGH
+	<Send>	"rd i2c adm 1 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_21_B_FAN_A_ON_FAN_B_ON_HIGH
+
+	<Msg>	"Fan 1 1 Fan on, Low Speed"
+	<Send> "wr i2c 9501 fan1 gpio 47"
+	<Wait>
+	<Sleep>	4
+
+	<Msg>	"Check Fan 2 TACH Speeds"
+	<Msg>	"Fan 2 One fan On, Low Speed"
+	<Send> "wr i2c 9501 fan2 gpio 47"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan2.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 2 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_A_FAN_A_OFF_FAN_B_ON_LOW
+	<Send>	"rd i2c adm 2 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_B_FAN_A_OFF_FAN_B_ON_LOW
+
+	<Msg>	"Fan 2 1 Fan on, High Speed"
+	<Send> "wr i2c 9501 fan2 gpio C7"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan2.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 2 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_A_FAN_A_OFF_FAN_B_ON_HIGH
+	<Send>	"rd i2c adm 2 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_B_FAN_A_OFF_FAN_B_ON_HIGH
+
+
+
+	<Msg>	"Fan 2 2 Fans on, Low Speed"
+	<Send> "wr i2c 9501 fan2 gpio 67"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan2.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 2 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_A_FAN_A_ON_FAN_B_ON_LOW
+	<Send>	"rd i2c adm 2 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_B_FAN_A_ON_FAN_B_ON_LOW
+
+
+
+	<Msg>	"Fan 2 2 Fans on, High Speed"
+	<Send> "wr i2c 9501 fan2 gpio E7"
+	<Wait>
+	<Sleep>	4
+	<Include>	Chassis_test_config_Fan2.inc
+	<Sleep>	4
+	<Send>	"rd i2c adm 2 70"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_A_FAN_A_ON_FAN_B_ON_HIGH
+	<Send>	"rd i2c adm 2 71"
+	<Wait>
+	<Getdata>  Check_Chassis_TACH_FAN_22_B_FAN_A_ON_FAN_B_ON_HIGH
+    <Send> "wr i2c 9501 fan1 gpio 47"
+	<Wait>
+
+	<Msg>	"Fan 2 1 Fan on, Low Speed"
+	<Send> "wr i2c 9501 fan2 gpio 47"
+	<Wait>
+	<Sleep>	4
+
+
+	 #PEM
+	 	<Msg>	'Check PEM 1'
+	<Msg>	'Check PEM 1'
+	<Send> 'sho pem 1'
+	<Wait>
+	<CheckData>	'PEM CARD 1 .on the RIGHT viewed from front. 9501 I/Os = ef'
+	<Msg>	"Check PEM 2"
+	<Msg>	"Check PEM 2"
+	<Send> "sho pem 2"
+	<Wait>
+	<CheckData>	"PEM CARD 2 .on the LEFT viewed from front. 9501 I/Os = ef"
+
+	#; Disable all, Added for Bug 14781 7/28/10
+
+	<Msg>	"Check Alarm 1"
+	<SendSlow> "sho alarm 1"
+	<Wait>
+	<GetData>
+	<CheckData>	"ALARM CARD 1 .on the RIGHT viewed from front. 9501 I/Os = a3"
+      <Prompt>  "#"
+      <send>	"exit"
+      <Wait>
+      <TimeOut>	120
+	 <Prompt>  "Resetting card"
+	 #<prompt>	"Stoke[local]#"
+     <Send>     "reset"
+#     <send>     "reload"
+#     <Sleep>    1
+#     <send>     "yes"
+    <Sleep>     2
+    <Power>     OFF
+    <Sleep>     4
+    <Power>     ON
+ 	<Wait>
+ 	<CheckDataX>  "Restarting devb-mvSata"
+ 	<Sleep>		1
+</loop>
+
+<End>

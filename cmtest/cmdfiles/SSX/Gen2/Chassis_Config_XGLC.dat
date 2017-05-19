@@ -1,0 +1,184 @@
+################################################################################
+#
+# Module:      Chassis_Config_XGLC.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis configuration test
+#
+# Version:    1.4 $Id: Chassis_Post_BI_XGLC.dat,v 1.2 2012/02/17 17:13:41 joe Exp $
+#
+# Changes:    Created 03/09/12
+#			  Changes for 6.1/13.1
+#			  Added HD Copy time Check
+#			  Added Support for PEM2, Fan2, SFP power meas, Copper,1gig LR SFP per port 10/30/13
+#			  Changes for 13.1 Based Diags 8/4/14
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2013 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+
+<Msg>		"xTurning on UUT Power ..."
+<ETTC>		2500
+<Power>		ON
+<Include>	Stop_stoke_bootloader.inc
+<Include>	Bootloader_setfanspeed.inc
+<Include>	Firstboot_DualIMC.inc
+<Include>	tftp_boot_imc_diag.inc
+<Include>	Get_System_Serial.inc
+
+<Bypass>	$HA_Session_N
+ <Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>		Init_HA_Port
+ </Bypass>
+</Bypass>
+
+<Include>	Check_1gig_SFP.inc
+<msg>		"Get SFP Power"
+<Exec>		GetSFPpower
+<Exec>		Display_SFP
+
+#Chassis test
+<Msg>		"Starting Noodle..."
+<Prompt>	"^slot ..>"
+<Send>		"pfeffa"
+<Wait>
+#<Prompt>	"^slot ..>"
+<Send>	"wr i2c 9501 fan1 gpio 47"
+<Wait>
+<Send>	"wr i2c 9501 fan2 gpio 47"
+<Wait>
+#UUT_Variable_ref[21]->{FAN2}= 1
+<Bypass>	$UUT_Variable_ref[22]->{FAN1}
+	<Msg>		"Testing Fan1 type"
+	<Include>	Chassis_test_Fan.inc
+	<Include>	Chassis_test_Fan_TACH.inc
+</bypass>
+<Bypass>	$UUT_Variable_ref[22]->{FAN2}
+	<Msg>		"Testing Fan2 type"
+	<Include>	Chassis_test_Fan_gen2.inc
+	<Include>	Chassis_test_Fan_TACH_gen2.inc
+</bypass>
+<Include>	Chassis_test_Alarm.inc
+<Include>	Chassis_test_Pem.inc
+<Send>
+<Wait>
+<Prompt>	"#"
+<Send>		"exit"
+<Wait>
+<Include>	Set_Fan_Speed.inc
+
+
+<Include>	tftpcopy_stoke_diag_XGLC.inc
+<Include>   HD_Copy_check.inc
+#<Include>   Check_Power.inc
+<Include>   Update_all_XGLC.inc
+#
+##### Update Start
+#<Include>	Update_all.inc
+#Flash update causing instability
+<Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset;reload"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal HD/MFG"
+<Include>	hd_boot_diag_XGLC.inc
+
+<Sleep>		20
+#### Update End
+
+###### Test Area Start ##############
+#<Include>   Set_Fan_Speed.inc
+<Msg>   "Setting new interpacekt gap"
+#1) pfeffa r8 f1002c3c => F
+#2) pfeffa w8 f1002c3c E  (Disable port 2)
+#3) pfeffa r8 f1002c0c => 6
+#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+#5) pfeffa w8 f1002c3c F (Enable port)
+<Send>      "pfeffa r8 f1002c3c"
+<Wait>
+<GetData>
+<Send>      "pfeffa w8 f1002c3c E"
+<Wait>
+<Send>      "pfeffa r8 f1002c0c"
+<Wait>
+<Send>      "pfeffa w8 f1002c0c 7"
+<Wait>
+<GetData>
+<Send>      "pfeffa w8 f1002c3c F"
+<Wait>
+<Bypass>	$HA_Session
+			<Exec>	Swap_cons
+ 			<Send>  "ls /hd/dump"
+			<Wait>
+			#<Include>	Check_HDP_Log_Error.inc
+			<Exec>	Swap_cons
+        	<Send>   "ls /hd/dump"
+			<Wait>
+</Bypass>
+<Include>   Internal_Snake_setup_XGLC.inc
+<Include>   Clear_Disco_XGLC.inc
+<Include>  Onscript_Start_XGLC.inc
+<Include>  Onscript_Check_XGLC.inc
+<Include>   BI_loopbacktest_XGLC.inc
+
+<Include>   Check_Disco_XGLC.inc
+#<Include>   Onscript_Start_XGLC.inc
+#<Include>   Onscript_Check_XGLC.inc
+<Include>   Check_HDP_Log_Error_XGLC.inc
+<Include>   Check_Disco_XGLC.inc
+
+## Moved to End, HA load this causes problems with GLC mounts
+<Include>   Check_IPMI_Chassis_XGLC.inc
+###### Test Area End ##############
+ <Msg>      "Reset IMC"
+<Send>      "pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>    $HA_Session
+    <Send>      "pfeffa on 1 w8 f400002b 11"
+    <Wait>
+</Bypass>
+<TimeOut>	120
+<Send>		"reset;reload"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	hd_boot_imc.inc
+<Include>	Enable_ISSU_XGLC.inc
+<Sleep>		20
+<Include>	Wait_Card_Stoke.inc
+
+<Include>	Check_Software_version_XGLC.inc
+<Include>   HA_Switchover_XGLC.inc
+<Include>	Show_Card_Stoke_XGLC.inc
+<Include>	Show_Env_Stoke_XGLC.inc
+<Include>	Show_Mem_Stoke_XGLC.inc
+<Include>   Ship_config.inc
+<Include> 	Configuration_test_XGLC.inc
+<Include>	Clean_IMC_drives_XGLC.inc
+<Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>	Swap_cons
+			<Include>	Clean_IMC_drives_XGLC.inc
+			<Exec>	Swap_cons
+</Bypass>
+<Include>	Check_Log_Alarm_XGLC.inc
+<Include>	Check_Log_Error_XGLC.inc
+<Include>   Show_Ship_config_XGLC.inc
+<Include>	Show_Env_Alarm_Stoke_XGLC.inc
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<Exec>		Print_Config_Data
+<End>

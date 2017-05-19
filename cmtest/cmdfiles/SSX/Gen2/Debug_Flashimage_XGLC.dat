@@ -1,0 +1,269 @@
+################################################################################
+#
+# Module:      Debug_Flashimage_XGLC.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench_Prog_Flash.dat,v 1.1 2011/12/12 22:54:26 joe Exp $
+#
+# Changes:    Created from Bench.dat  092811
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+#  Jumper Selection
+#	J39, J40 Open (SPI bus) SPI funtion not implemented
+#    J41 Diag 2 open
+#    J36 Jumper installed  Same function as IMC GLC
+#    J39 + J41 installed forces to Flash Bank X not verified
+#	 J40 + J41 installed forces to Flash Bank X not verified
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_boot.inc
+<Msg>		$Bench_Prog_card_type_gbl
+#<Msg>		"Harcoded to XGLC card"
+<ETTC>		700
+<Msg>		"Program XGLC Flash"
+<Msg>		"Verify at Stoke>.."
+<TimeOut>	5
+<Send>		""
+<WaitFor>	"Stoke>"
+
+<Prompt>	"Stoke>"
+<TimeOut>	5
+
+<Send>		"version"
+<Wait>
+<GetData>
+
+<TimeOut>	10
+<Msg>		"Getting Product / Serial info ..."
+<Send>		"tlvread local tlv 0"
+<Wait>
+<GetData>	Board
+<Msg>		"Program Flash"
+
+<Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>     $Exit_On_Timeout
+
+ <Msg>		"Set Stop On Error"
+
+<Set>    	$Exit_On_Error
+<Set>		$Exit_On_Timeout
+
+ <Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>    $Exit_On_Timeout
+
+
+<Send>		"version"
+<Wait>
+<GetData>
+
+
+#
+<Msg>       "Configure Ethernet"
+# setenv ipaddr 172.17.24.11
+<SendChr>      "setenv ipaddr "
+<Send>		$UUT_IP
+<Wait>
+<GetData>
+
+<SendChr>      "setenv serverip "
+<Send>		$HOST_IP
+<Wait>
+<GetData>
+<GetData>
+
+<SendChr>      "ping  "
+<Send>		$HOST_IP
+<Wait>
+<GetData>
+<CheckData>	"host .* is alive"
+<GetData>
+
+
+
+
+
+###############  All  e8000000 ######################
+<Timeout>	120
+<Msg>	"Check  Primary Version"
+<Send>	"md.b ffdf0043 1"
+<Wait>
+<GetData>
+#Primary Flash Default power on
+<CheckData> "ffdf0043: 01"
+
+# Clear DRAM memory
+<Send>	"mw.l 1000000 ffffffff 8000000"
+<Wait>
+<GetData>
+<CheckDatax>  "error"
+#TFTP File for DRAM
+#tftp 1000000 OS_G/rcw_xglc.bin   #Bytes transferred = 134217728 (8000000 hex)
+<Msg>	"TFTP Image"
+<Send>	"tftp 1000000 OS_A/flashimg.bin"
+<Wait>
+<GetData> Check_tftp_size
+<CheckData>  "Bytes transferred = 134217728"
+#Compare  CRC of code im memory to code in Flash    +$filesize
+#<Send>  "crc32 01000000 1000000"
+<Send>	"crc32 01000000 8000000"
+<Wait>
+<GetData> Check_CRC32
+<CheckData>  "CRC32 for 01000000.*35fdcef6"
+#<Send>	"crc32 e8000000 1000000"
+#<Send>	"crc32 e8000000 $filesize"
+<Send>	"cmp.b 01000000 e8000000 8000000"
+<Wait>
+<GetData> Check_bytecompare
+# $compare_gbl
+#<GetData> Check_CRC32
+#<CheckData>  "CRC32 for 01000000.*35fdcef6"
+#<bypass> $crc32_match_gbl
+<bypass> $compare_gbl
+	<Msg>	"Program Primary (30min)..."
+	#Remove Flash protection
+	#protect off e8000000 e8FFFFFF  #Un-Protected 128 sectors
+	#<Send>  "protect off e8000000 e8FFFFFF"
+	<Send>  "protect off e8000000 eFFFFFFF"
+	<Wait>
+	<GetData>
+	<CheckData>  "Un-Protected"
+	<Timeout>   7200
+	#Erase Flash
+	#erase e8000000 e8FFFFFF  #Erased 128 sectors
+	#<Send>  "erase e8000000 e8FFFFFF"
+	<Send>  "erase e8000000 eFFFFFFF"
+	<Wait>
+	<GetData>
+	<CheckData>  "Erased"
+	#Copy from memory to flash
+	#cp.b 1000000 e8000000 1000000  #.done
+	#<Send>  "cp.b 1000000 e8000000 1000000"
+	<Send>  "cp.b 1000000 e8000000 8000000"
+	<Wait>
+	<GetData>
+	<CheckData>  "done"
+	<Checkdatax> 'error'
+	#dump0x40 of flash location
+	#md.b e8000000 40
+	<Send>  "md.b e8000000 40"
+	<Wait>
+	<GetData>
+	<Timeout>   30
+	#CRC check Flash Space
+	#crc32 e8000000 1000000  #CRC32 for e8000000 ... e8ffffff ==> 9247a644
+	#<Send>  "crc32 e8000000 1000000"
+	<Send>  "crc32 e8000000 8000000"
+	<Wait>
+	<GetData>
+	<CheckData>  "CRC32 for e8000000.*35fdcef6"
+	#Apply flash protection
+	#protect on e8000000 e8FFFFFF  #Protected 128 sectors
+	#<Send>  "protect on e8000000 e8FFFFFF"
+	<Send>  "protect on e8000000 eFFFFFFF"
+	<Wait>
+	<GetData>
+	<CheckData>  "Protected"
+</bypass>
+
+
+<Msg>   "Check Secondary Version"
+#=> secondary bank
+<Send>  "mw.b ffdf0043 0"
+<Wait>
+<Send>  "md.b ffdf0043 1"
+<Wait>
+<GetData>
+#Secondary Flash
+<CheckData> "ffdf0043: 00"
+#Compare  CRC of code im memory to code in Flash
+<Send>	"crc32 01000000 8000000"
+<Wait>
+<GetData> Check_CRC32
+<CheckData>  "CRC32 for 01000000.*35fdcef6"
+#<Send>	"crc32 e8000000 $filesize"
+#<Wait>
+#<GetData> Check_CRC32
+#<CheckData>  "CRC32 for 01000000.*35fdcef6"
+<Send>	"cmp.b 01000000 e8000000 8000000"
+<Wait>
+<GetData> Check_bytecompare
+# $compare_gbl
+
+<bypass> $compare_gbl
+	<Msg>	"Program Secondary (30min)..."
+	<Send>  "protect off e8000000 eFFFFFFF"
+	<Wait>
+	<GetData>
+	<CheckData>  "Un-Protected"
+	<Timeout>   72000
+	#Erase Flash
+	#erase e8000000 e8FFFFFF  #Erased 128 sectors
+	<Send>  "erase e8000000 eFFFFFFF"
+	<Wait>
+	<GetData>
+	<CheckData>  "Erased"
+	#Copy from memory to flash
+	#cp.b 1000000 e8000000 1000000  #.done
+	#<Send>  "cp.b 1000000 e8000000 1000000"
+	<Send>  "cp.b 1000000 e8000000 8000000"
+	<Wait>
+	<GetData>
+	<CheckData>  "done"
+	<Checkdatax> 'error'
+	#dump0x40 of flash location
+	#md.b e8000000 40
+	<Send>  "md.b e8000000 40"
+	<Wait>
+	<GetData>
+	<Timeout>   30
+	#CRC check Flash Space
+	#crc32 e8000000 1000000  #CRC32 for e8000000 ... e8ffffff ==> 35fdcef6
+	<Send>  "crc32 e8000000 8000000"
+	<Wait>
+	<GetData>
+	<CheckData>  "CRC32 for e8000000.*35fdcef6"
+	#Apply flash protection
+	#protect on e8000000 e8FFFFFF  #Protected 128 sectors
+	<Send>  "protect on e8000000 eFFFFFFF"
+	<Wait>
+	<GetData>
+	<CheckData>  "Protected"
+</bypass>
+# Change back to => primary bank
+<Send>  "mw.b ffdf0043 1"
+<Wait>
+<Send>  "md.b ffdf0043 1"
+<Wait>
+<GetData>
+#Secondary Flash
+<CheckData> "ffdf0043: 01"
+##
+
+################   ######################
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<Sleep>		5
+<Msg>		"Turning off UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_boot.inc
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+
+<End>

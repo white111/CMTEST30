@@ -1,0 +1,247 @@
+################################################################################
+#
+# Module:      Debug_Bench_GLC_Powercyle.dat
+#
+# Author:      Joe White
+#
+# Descr:       Power Cycle test
+#		       #	PCI Startup
+#				Forwarding unit Startup
+#				# Sram Startup
+#			    Cavium Basic Operation
+#				#TCAM operation
+#				#Sahasera Operation
+#
+# Version:    1.0  $Id: Bench_GLC.inc,v 1.7.2.1 2011/01/21 17:45:25 joe Exp $
+#
+# Changes:    Created 4/19/12   NPF Process Script
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<ETTC>		700
+<Alert>		"Test Works with exsisting files"
+<Sleep>		5
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+<Include>	Stop_stoke_boot.inc
+
+<Msg>		"Test IMC"
+<Msg>		"Verify at Stoke>>.."
+<TimeOut>	5
+<Send>		""
+<WaitFor>	"Stoke>>"
+
+<Prompt>	">"
+<TimeOut>	5
+<Msg>		"Starting Noodle..."
+<Send>		"go ffe00100"
+<Wait>
+
+<Send>		"show version"
+<Wait>
+<GetData>
+
+<TimeOut>	10
+<Msg>		"Getting Product / Serial info ..."
+<Send>		"rd i2c U67 tlv"
+<Wait>
+<GetData>	Board
+<Msg>		"Test IMC Voltages..."
+<Send>		"test volt"
+<Wait>
+<CheckData>	PASS
+
+
+<Msg>		"Checking IMC DC voltages ..."
+<Send>		"show volt"
+<Wait>
+<GetData>	Volts
+
+<TimeOut>	10
+
+<Msg>		"Reset board"
+<TimeOut>	60
+<Prompt>	"Stoke>>"
+<Send>		"reset board"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"TFTP Boot ..."
+<Include>	tftp_boot_imc_stoke.inc
+<TimeOut>	60
+#<Include>   Ship_config.inc
+	<Msg>		"Check log for  Errors"
+	<Sendslow>		"terminal length infinite"
+	<Wait>
+	<Sendslow>		"show log"
+	<Wait>
+	<Checkdata>		"CardMgr-INSUF_HWADDR: Slot 0 needs 1 port hardware"
+	<Checkdata>		"ERR CardMgr-BAD_CHASSIS_MAC: Could not validate Chassis MAC"
+	<checkdata> 	"Failed to read local chassis seeprom"
+	<iCheckDatax>	"error"
+	<iCheckDatax>	"fail"
+	<iCheckDatax>	"ecc"
+	<iCheckDatax>	"warn"
+	<iCheckDatax>	"swap"
+	<iCheckDatax>	"maj"
+	<iCheckDatax>	"minor"
+	<iCheckDatax>	"crit"
+	<GetData>
+	<Sendslow>		"show env det"
+	<Wait>
+	<iCheckDatax>	"error"
+	<iCheckDatax>	"fail"
+	<iCheckDatax>	"ecc"
+	<iCheckDatax>	"warn"
+	<iCheckDatax>	"swap"
+	<iCheckDatax>	"maj"
+	<iCheckDatax>	"minor"
+	<iCheckDatax>	"crit"
+	<GetData>
+
+<Msg>		"Shutting down system..."
+<Timeout>	120
+<prompt>	"yes"
+<Send>		"reload"
+<wait>
+<Send>		"y"
+<sleep>		1
+<Prompt>   "Stoke[local]#"
+
+
+
+       #12Hrs
+<loop>		43200
+	<Include>	Stop_stoke_boot.inc
+
+	<Msg>		"Test IMC"
+	<Msg>		"Verify at Stoke>>.."
+	<TimeOut>	5
+	<Send>		""
+	<WaitFor>	"Stoke>>"
+
+	<Prompt>	">"
+	<TimeOut>	5
+	<Msg>		"Starting Noodle..."
+	<Send>		"go ffe00100"
+	<Wait>
+
+	<Send>		"show version"
+	<Wait>
+	<GetData>
+	<Msg>		"Test IMC Voltages..."
+<Send>		"test volt"
+<Wait>
+<CheckData>	PASS
+
+
+<Msg>		"Checking IMC DC voltages ..."
+<Send>		"show volt"
+<Wait>
+<GetData>	Volts
+
+	<TimeOut>	10
+
+	<Msg>		"Reset board"
+	<TimeOut>	60
+	<Prompt>	"Stoke>>"
+	<Send>		"reset board"
+	<Include>	Stop_stoke_bootloader.inc
+	<Msg>		"TFTP Boot ..."
+	<Include>	tftp_boot_imc_stoke.inc
+	<TimeOut>	60
+	#<Include>   Ship_config.inc
+	<Msg>		"Check log for  Errors"
+	<Sendslow>		"terminal length infinite"
+	<Wait>
+	<Sendslow>		"show log"
+	<Wait>
+	<Checkdata>		"CardMgr-INSUF_HWADDR: Slot 0 needs 1 port hardware"
+	<Checkdata>		"ERR CardMgr-BAD_CHASSIS_MAC: Could not validate Chassis MAC"
+	<checkdata> 	"Failed to read local chassis seeprom"
+	<iCheckDatax>	"error"
+	<iCheckDatax>	"fail"
+	<iCheckDatax>	"ecc"
+	<iCheckDatax>	"warn"
+	<iCheckDatax>	"swap"
+	<iCheckDatax>	"maj"
+	<iCheckDatax>	"minor"
+	<iCheckDatax>	"crit"
+	<GetData>
+	<Sendslow>		"show env det"
+	<Wait>
+	<iCheckDatax>	"error"
+	<iCheckDatax>	"fail"
+	<iCheckDatax>	"ecc"
+	<iCheckDatax>	"warn"
+	<iCheckDatax>	"swap"
+	<iCheckDatax>	"maj"
+	<iCheckDatax>	"minor"
+	<iCheckDatax>	"crit"
+	<GetData>
+
+	<Msg>		"Shutting down system..."
+	<Timeout>	120
+	<prompt>	"yes"
+	<Send>		"reload"
+	<wait>
+	<Send>		"y"
+	<sleep>		1
+	<Include>	Stop_stoke_bootloader.inc
+	<Msg>		"Booting from Internal Compact Flash"
+	<Include>	hd_boot_imc.inc
+	<TimeOut>	60
+	#<Include>   Ship_config.inc
+	<Msg>		"Check log for  Errors"
+	<Sendslow>		"terminal length infinite"
+	<Wait>
+	<Sendslow>		"show log"
+	<Wait>
+	<Checkdata>		"CardMgr-INSUF_HWADDR: Slot 0 needs 1 port hardware"
+	<Checkdata>		"ERR CardMgr-BAD_CHASSIS_MAC: Could not validate Chassis MAC"
+	<checkdata> 	"Failed to read local chassis seeprom"
+	<iCheckDatax>	"error"
+	<iCheckDatax>	"fail"
+	<iCheckDatax>	"ecc"
+	<iCheckDatax>	"warn"
+	<iCheckDatax>	"swap"
+	<iCheckDatax>	"maj"
+	<iCheckDatax>	"minor"
+	<iCheckDatax>	"crit"
+	<GetData>
+	<Sendslow>		"show env det"
+	<Wait>
+	<iCheckDatax>	"error"
+	<iCheckDatax>	"fail"
+	<iCheckDatax>	"ecc"
+	<iCheckDatax>	"warn"
+	<iCheckDatax>	"swap"
+	<iCheckDatax>	"maj"
+	<iCheckDatax>	"minor"
+	<iCheckDatax>	"crit"
+	<GetData>
+
+	<Msg>		"Shutting down system..."
+	<Timeout>	120
+	<prompt>	"yes"
+	<Send>		"reload"
+	<wait>
+	<Send>		"y"
+	<sleep>		3
+
+
+	<Msg>		"Power Cycling"
+	<Power>		OFF
+	<Sleep>		5
+	<Power>		ON
+</loop>
+
+<end>

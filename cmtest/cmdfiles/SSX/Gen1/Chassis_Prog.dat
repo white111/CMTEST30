@@ -1,0 +1,351 @@
+################################################################################
+#
+# Module:      Chassis_Prog.inc
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis Programming
+#
+# Version:    1.4 $Id: Chassis_Prog.dat,v 1.4.4.1 2011/08/19 15:18:37 joe Exp $
+#
+# Changes:    Created 10/30/06
+#				Added Send Slow programming chassis tlv 5/11/11 - Issue at creation
+#				Added Erase of EEprom before program 5/12/11
+#				Added Slot 0 ID Check 7/20/11
+#
+# Includes:
+#
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2008 Stoke. All rights reserved.
+#
+################################################################################
+
+
+
+<Prompt>	">"
+
+<Exec> 		Chassis_Program
+
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+<Include>	Stop_stoke_boot.inc
+
+#If we boot to noodle
+<Msg>		"Verify at Stoke>>.."
+<TimeOut>	1
+<Send>		""
+<WaitFor>	"Stoke>>"
+
+<Prompt>	">"
+<TimeOut>	5
+<Msg>		"Starting Noodle..."
+<Send>		"go ffe00100"
+<Wait>
+
+
+# For some reason, this is required - UUT timing problem
+<Send>
+<Wait>
+
+<Msg>		"Check Slot ID..."
+<Send>
+<Wait>
+<GetData>
+<CheckData>	"slot 0"
+
+<Msg>		"Test Voltages..."
+<Send>		"test volt"
+<Wait>
+<GetData>
+<CheckData>	PASS
+
+
+<Msg>		"Checking DC voltages ..."
+<Send>		"show volt"
+<Wait>
+<GetData>	Volts
+
+<Msg>		"Slow Fans"
+<Send>		"wr i2c 9501 fan1 gpio 47"
+<Waitfor>	">"
+<Send>		"wr i2c 9501 fan2 gpio 47"
+<Waitfor>	">"
+<Send>		"set verb 1"
+<Waitfor>	">"
+<Timeout>	10
+<Msg>		"Check if on IPMI A"
+<Send>		"r8 f400001f"
+<Waitfor>	"F400001F   09"
+<GetData>
+<Timeout>	60
+<Bypass>	$Slot_INST_GBL[0]
+			# Chassis is Slot 0
+			<Msg>	"Erase Chassis Eprom"
+			<Send>	"wr i2c 9501 chassis 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 chassis 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program Chassis TLV 0"
+ 			<SendSlow>  $UUT_Variable[0]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program Chassis TLV 7"
+ 			<SendSlow>  $UUT_Variable[0]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program Chassis TLV 8"
+ 			<SendSlow>  $UUT_Variable[0]->{GLOBAL_TLV_8}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify Chassis TLV 0"
+ 			<Send>	"rd i2c 9501 chassis tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[0]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify Chassis TLV 7"
+ 			<Send>	"rd i2c 9501 chassis tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[0]
+ 			<GetData>
+ 			<Msg>	"Verify Chassis TLV 8"
+ 			<Send>	"rd i2c 9501 chassis tlv 8'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[0]->{TLV_8_VERIFY}
+ 			<GetData>
+
+</Bypass>
+
+<Msg>		"Select IPMI B"
+<Send>		"w8 f400001f 07"
+<Wait>
+<GetData>
+<Msg>		"Check if on IPMI B"
+<Send>		"r8 f400001f"
+<Waitfor>	"F400001F   07"
+<GetData>
+<Bypass>	$Slot_INST_GBL[0]
+			# Chassis is Slot 0
+			<Msg>	"Erase Chassis Eprom"
+			<Send>	"wr i2c 9501 chassis 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 chassis 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program Chassis TLV 0"
+ 			<Sendslow>  $UUT_Variable[0]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program Chassis TLV 7"
+ 			<Sendslow>  $UUT_Variable[0]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program Chassis TLV 8"
+ 			<Sendslow>  $UUT_Variable[0]->{GLOBAL_TLV_8}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify Chassis TLV 0"
+ 			<Send>	"rd i2c 9501 chassis tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[0]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify Chassis TLV 7"
+ 			<Send>	"rd i2c 9501 chassis tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[0]
+ 			<GetData>
+ 			<Msg>	"Verify Chassis TLV 8"
+ 			<Send>	"rd i2c 9501 chassis tlv 8'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[0]->{TLV_8_VERIFY}
+ 			<GetData>
+
+</Bypass>
+
+<Bypass>	$Slot_INST_GBL[1]
+			# PEM 1 is Slot 1
+			<Msg>	"Erase PEM 1 Eprom"
+			<Send>	"wr i2c 9501 pem1 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 pem1 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program PEM 1 Right TLV 0"
+ 			<Send>  $UUT_Variable[1]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program PEM 1 Right TLV 7"
+ 			<Send>  $UUT_Variable[1]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify PEM 1 Right TLV 0"
+ 			<Send>	"rd i2c 9501 pem1 tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[1]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify PEM 1 Right TLV 7"
+ 			<Send>	"rd i2c 9501 pem1 tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[1]
+ 			<GetData>
+ </Bypass>
+
+ <Bypass>	$Slot_INST_GBL[2]
+			# PEM 2 is Slot 2
+			<Msg>	"Erase PEM 2 Eprom"
+			<Send>	"wr i2c 9501 pem2 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 pem2 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program PEM 2 Left TLV 0"
+ 			<Send>  $UUT_Variable[2]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program PEM 2 Left TLV 7"
+ 			<Send>  $UUT_Variable[2]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify PEM 2 Left TLV 0"
+ 			<Send>	"rd i2c 9501 pem2 tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[2]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify PEM 2 Left TLV 7"
+ 			<Send>	"rd i2c 9501 pem2 tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[2]
+ 			<GetData>
+ </Bypass>
+
+ <Bypass>	$Slot_INST_GBL[3]
+			# Fan 1 is Slot 3
+			<Msg>	"Erase FAN 1 Eprom"
+			<Send>	"wr i2c 9501 fan1 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 fan1 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program FAN 1 Right TLV 0"
+ 			<Send>  $UUT_Variable[3]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program FAN 1 Right TLV 7"
+ 			<Send>  $UUT_Variable[3]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify FAN 1 Right TLV 0"
+ 			<Send>	"rd i2c 9501 fan1 tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[3]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify FAN 1 Right TLV 7"
+ 			<Send>	"rd i2c 9501 fan1 tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[3]
+ 			<GetData>
+ </Bypass>
+
+ <Bypass>	$Slot_INST_GBL[4]
+			# FAN 2 is Slot 4
+			<Msg>	"Erase FAN 2 Eprom"
+			<Send>	"wr i2c 9501 fan2 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 fan2 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program FAN 2 Left TLV 0"
+ 			<Send>  $UUT_Variable[4]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program FAN 2 Left TLV 7"
+ 			<Send>  $UUT_Variable[4]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify FAN 2 Left TLV 0"
+ 			<Send>	"rd i2c 9501 fan2 tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[4]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify FAN 2 Left TLV 7"
+ 			<Send>	"rd i2c 9501 fan2 tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[4]
+ 			<GetData>
+ </Bypass>
+
+ <Bypass>	$Slot_INST_GBL[5]
+			# Alarm 1 is Slot 5
+			<Msg>	"Erase Alarm 1 Eprom"
+			<Send>	"wr i2c 9501 alarm1 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 alarm1 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program Alarm 1 Right TLV 0"
+ 			<Send>  $UUT_Variable[5]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program ALarm 1 Right TLV 7"
+ 			<Send>  $UUT_Variable[5]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify Alarm 1 Right TLV 0"
+ 			<Send>	"rd i2c 9501 alarm1 tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[5]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify Alarm 1 Right TLV 7"
+ 			<Send>	"rd i2c 9501 ALarm1 tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[5]
+ 			<GetData>
+ </Bypass>
+
+ <Bypass>	$Slot_INST_GBL[6]
+			# ALarm 2 is Slot 6
+			<Msg>	"Erase Alarm 2 Eprom"
+			<Send>	"wr i2c 9501 alarm2 0 0"
+			<Wait>
+			<GetData>
+			<Send>	"wr i2c 9501 alarm2 1 0"
+			<Wait>
+			<GetData>
+ 			<Msg>	"Program Alarm 2 Left TLV 0"
+ 			<Send>  $UUT_Variable[6]->{GLOBAL_TLV_0}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Program Alarm 2 Left TLV 7"
+ 			<Send>  $UUT_Variable[6]->{GLOBAL_TLV_7}
+ 			<Wait>
+ 			<GetData>
+ 			<Msg>	"Verify Alarm 2 Left TLV 0"
+ 			<Send>	"rd i2c 9501 alarm2 tlv 0'
+ 			<Wait>
+ 			<CheckData>  $UUT_Variable[6]->{TLV_0_VERIFY}
+ 			<GetData>
+ 			<Msg>	"Verify Alarm 2 Left TLV 7"
+ 			<Send>	"rd i2c 9501 alarm2 tlv 7'
+ 			<Wait>
+ 			<CheckData>  $SN[6]
+ 			<GetData>
+ </Bypass>
+
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+
+<END>
+

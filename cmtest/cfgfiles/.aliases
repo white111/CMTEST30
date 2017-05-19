@@ -1,0 +1,32 @@
+# .aliases	PT 2005-11-17-A
+
+# bash shell additions for users (.bashrc is under release control!)
+
+# User specific aliases and functions
+# Note: This file will be sourced AFTER any NFS mounted version is sourced!
+
+alias hi='history'
+alias ll='ls -ll --color=tty $1'
+alias lt='ls -lt  --color=tty $1'
+alias la='ls -la  --color=tty $1'
+alias l.='ls -d .* --color=tty'
+alias ls='ls --color=tty'
+
+alias vi='vim'
+
+alias cdl='pushd /usr/local/cmtest'
+alias cdn='pushd /var/local/cmtest'
+alias logs='pushd /var/local/cmtest/logs'
+alias cdn='pushd /var/local/cmtest'
+alias ipconfig='/sbin/ifconfig'
+
+
+alias abort='abort.pl'
+alias cmtest='cmtest.pl'
+
+# ste = Set Test Environmnet
+alias ste='. settestenv $1'
+alias release='. setrelease $1 $2'
+alias switch='. settestenv -pr'
+
+

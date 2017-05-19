@@ -1,0 +1,215 @@
+################################################################################
+#
+# Module:      release.txt(diag)
+#
+# Author:      Joe White
+#
+# Descr:       Stoke Manufacturing Diags release Notes
+#
+# Version:   1.0  $Id: release.txt,v 1.1 2010/03/02 19:09:21 joe Exp $
+#
+# Changes:    Added Versioning
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+2:07 PM 10/24/2014
+\\harp\build\builder\hw_2013-debug\2014102401\mc2diag.bin
+1:06 PM 10/21/2014
+\\harp\build\zjayadev\branch_hw2013\qnx\cb\mc\mc2diag.bin
+12:42 PM 10/20/2014
+\\harp\build\builder\hw_2013-debug\2014102001\qnx\cb\mc\mc2diag.bin
+3:46 PM 9/22/2014 9/22 Build
+\\harp\build\gregk\a\qnx\cb\mc
+1:55 PM 9/15/2014
+\\harp\build\gregk\a\qnx\cb\mc\mc2diag.bin
+3:00 PM 9/5/2014
+\\harp\Build\builder\hw_2013-debug\2014090501\qnx\cb\mc\mc2diag.bin
+4:17 PM 9/3/2014
+\\harp\build\builder\hw_2013-debug\2014082901\qnx\cb\mc\mc2diag.bin
+11:08 AM 9/2/2014
+\\harp\Build\builder\hw_2013-debug\2014090201\qnx\cb\mc
+11:26 AM 8/29/2014
+\\harp\build\builder\hw_2013-debug\2014082901\qnx\cb\mc\mc2diag.bin
+12:17 PM 8/20/2014
+\\harp\build\builder\hw_2013-debug\2014082001\qnx\cb\mc\mc2diag.bin
+11:02 PM 8/14/2014
+\\harp\Build\zjayadev\new_hw_2013\qnx\cb\mc 08/14/14s
+\\harp\build\zjayadev\new_hw_2013\qnx\cb\mc\mcdiag.bin Aug 7 Build
+4:49 PM 8/5/2014
+\\harp\build\latvia-mc\mc2diag.bin
+9:38 AM 7/31/2014
+\\harp\build\builder\13.1\2014072918\qnx\cb\mc\diag.bin->diag_xglc.bin
+9:19 AM 7/30/2014
+\\harp\build\builder\hw_2013-debug\2014073001\qnx\cb\mc
+9:33 AM 7/24/2014
+\\harp\build\gregk\a\qnx\cb\mc\diag.bin
+9:18 AM 7/24/2014
+\\harp\build\builder\13.1\2014071118\qnx\cb\mc\diag.bin
+11:21 AM 7/23/2014 eval
+\\harp\Build\builder\13.1\2013111211\qnx\cb\mc\diag.bin->diag_xglc.bin
+
+11:00 AM 8/28/2013   New Diag Qual \\harp\build\builder\13.1\2013082718\qnx\cb\mc - Bench Only
+\\harp\build\builder\13.1\2013082718\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+/auto/build/builder/xglc-programmables/p4080/agile/rcw_diag_bloader_fman_uboot_ver17.bin
+    ./combo_func rcw_diag_bloader_fman_uboot_ver17.bin 
+    /auto/build/builder/xglc-programmables/p4080/rcw_xglc_06.bin 
+   /auto/build/builder/13.1/2013082718/qnx/cb/lc/xglcdiag.bin 
+   /auto/build/builder/13.1/2013082718/qnx/cb/mc/bootloader2 
+  /auto/build/builder/xglc-programmables/p4080/fsl_fman_ucode_P4080_101_6.bin 
+  /auto/build/builder/uboot/6.0/2013030510/u-boot-xglc.bin
+
+8:41 AM 2/1/2013 \\harp\Build\builder\6.1\2013013121\qnx\cb\mc - Spansion and longrech fix
+\\harp\Build\builder\6.1\2013013121\qnx\cb\mc\diag.bin->diag_xglc.bin
+\\harp\Build\builder\6.1\2013013121\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+2:19 PM 1/31/2013 \\harp\Build\rboreda\r0123_61\qnx\cb\mc
+\\harp\Build\rboreda\r0123_61\qnx\cb\mc\diag.bin
+\\\harp\Build\rboreda\r0123_61\qnx\cb\lc\xglcdiag.bin - xglcflashdiag
+
+5:34 PM 1/10/2013 \\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc - Testing new spansion device
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc\diag.bin->diag_xglc.bin
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+
+1:33 PM 12/17/2012 \\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc
+\\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc->dig.bin->diag_xglc.bin
+7:57 AM 9/13/2012  Release for Flash Masters
+\\harp\Build\builder\6.0\2012091119\qnx\cb\mc\diag_xglc.bin
+\\harp\Build\builder\6.0\2012091119\qnx\cb\lc\xglcflashdiag.bin
+
+10:01 AM 9/11/2012 New B1 Diags with interups for DRAM tests
+\\harp\Build\builder\6.0\2012091019\qnx\cb\mc\diag.bin->diag_xglc.bin
+\\harp\Build\builder\6.0\2012091019\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+
+4:46 PM 9/5/2012  New B1 diags, improved memory tests coverage
+\\harp\Build\builder\6.0\2012090419\qnx\cb\mc\diag.bin->diag_xglc.bin
+\\harp\Build\builder\6.0\2012090419\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+4:09 PM 8/2/2012 \\harp\Build\builder\6.0\2012080119 Fix for XLP memory failures
+\\harp\Build\builder\6.0\2012080119\qnx\cb\mc\diag.bin->diag_xglc.bin
+\\harp\Build\builder\6.0\2012080119\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+3:42 PM 8/1/2012 Fix for XLP failures
+/auto/build/rboreda/r0426/qnx/cb/mc/diag.bin->diag_xglc.bin
+
+2:53 PM 7/26/2012   Put back jul 10 image to make all B1 same revision
+1:28 PM 7/17/2012   XLP B1 Software
+\\harp\Build\builder\6.0\2012071619\qnx\cb\mc\diag.bin -> diag_xglc.bin
+12:59 PM 7/11/2012  XLP B1 software
+/auto/build/rchung/xglcdiag-xlpb1.bin -> xglcflashdiag.bin
+
+3:31 PM 6/4/2012
+\\harp\Build\builder\6.0\2012052519\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+4:09 PM 5/31/2012 \\harp\Build\builder\6.0\2012052519
+\\harp\Build\builder\6.0\2012052519\qnx\cb\mc\diag.bin -> diag_xglc.bin
+\\harp\Build\builder\xglc-programmables\p4080\xglcdiag_2012042519.bin->xglcflashdiag.bin <****didnot work***>
+
+9:22 AM 4/4/2012   \\harp\Build\builder\6.0\2012040319\qnx\cb\mc\diag.bin -> diag_xglc.bin
+###  GLC Diags ###
+10:21 AM 3/20/2012  /auto/build/builder/mfgdiag/4_6/20120319 , \\harp\Build\builder\mfgdiag\4_6\20120319 bit flip fix
+
+2:33 PM 3/23/2012 /auto/build/rboreda/imc_diag_0323.bin
+3:11 PM 3/22/2012 /auto/build/rboreda/imc_diag_0322.bin
+
+12:35 PM 3/8/2012 \\harp\Build\builder\6.0\2012030801\qnx\cb\mc -> diag_xglc.bin
+3/6/12 Private build from Raghu to fix peffa terminal issue
+2:59 PM 2/14/2012  auto/build/rboreda/imc_diag_0214.bin ->diag_xglc.bin
+3:25 PM 2/13/2012 /auto/build/rboreda/imc_diag_0213.bin ->diag_xglc.bin
+
+4:26 PM 2/6/2012 \\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc
+\\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc\diag.bin -> stoke.bin
+8:01 AM 2/3/2012 \\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc
+\\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc\diag.bin -> diag_xglc.bin
+
+5:30 PM 1/24/2012 \\harp\Build\builder\xglc-programmables\p4080\agile ( Same files in rcw_diag_bloader_fman_uboot_ver8.bin  ** Released for Flash Mastering ****
+sudo ~rboreda/code/combo_func agile/
+\\harp\Build\builder\xglc-programmables\p4080\stoke_xglc_20120124.img -> xglcflashdiag.bin
+
+
+9:36 PM 1/19/2012  \\harp\Build\builder\6.0\2012011901\qnx\cb\mc
+\\harp\Build\builder\6.0\2012011901\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+\\harp\Build\builder\6.0\2012011901\qnx\cb\lc\glcdiag.bin->xglcflashdiag.bin
+
+
+
+7:43 AM 1/12/2012 \\harp\Build\builder\6.0\2012011201\qnx\cb\mc
+\\harp\Build\builder\6.0\2012011201\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+\\harp\Build\builder\6.0\2012011201\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+
+3:22 PM 1/3/2012  \\harp\Build\builder\6.0\2011122301
+\\harp\Build\builder\6.0\2011122301\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+\\harp\Build\builder\6.0\2011122301\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+
+10:25 AM 12/19/2011  - Flash release Canidate
+\\harp\Build\builder\6.0\2011121701\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+\\harp\Build\builder\6.0\2011121701\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+
+7:23 AM 12/13/2011
+\\harp\Build\builder\6.0\2011121301\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+\\harp\Build\builder\6.0\2011121301\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+4:49 PM 12/12/2011
+\\harp\Build\builder\6.0\2011121201\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+\\harp\Build\builder\6.0\2011121201\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+
+2:43 PM 12/12/2011
+\\harp\Build\rboreda\diag_imc_1129.bin->diag_xglc.bin
+
+6:17 PM 12/9/2011
+\\harp\Build\builder\6.0\2011120901\qnx\cb\mcdiag.bin-> -> diag_xglc.bin
+\\harp\Build\builder\6.0\2011120901\qnx\cb\lc\
+
+5:59 PM 12/3/2011
+\\harp\Build\builder\6.0\2011120301\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+\\harp\Build\builder\6.0\2011120301\qnx\cb\mc\diag.bin-> -> diag_xglc.bin
+
+
+3:12 PM 11/11/2011 - working snake test from Ragu
+/auto/build/builder/6.0/2011102020/qnx/cb/mc/diag.bin -> -> diag_xglc.bin
+CRC32:82D580FF
+/auto/build/builder/6.0/2011102020/qnx/cb/lc/xglcdiag.bin -> xglcflashdiag.bin
+CRC32:E354838C
+
+ 
+9:56 PM 11/22/2011
+\\harp\Build\builder\6.0\2011112201\qnx\cb\mc\diag.bin -> diag_xglc.bin
+CRC32: 
+2009 Diags diag.bin -> diag_glc.bin
+CRC32: B8DC1B65
+\\harp\Build\builder\6.0\2011111901\qnx\cb\lc\xglcdiag.bin -> xglcflashdiag.bin (Fails)
+CRC32: 
+
+Original xglcflashdiag.bin CRC32: 091BAD75
+original: xglcdiag.bin.orig CRC32 4843C19D - november Build
+
+Latest changes dram test fix fabd can do trunking
+\\harp\Build\build\builder\uburn\diag.bin.2008022700 
+Diag 2/27/08 - latest changes with dram changes and trunking disabled for test
+On scripts changed to IMC.ksh and GLC.KSH with imbeded versioning
+8:28 AM 3/12/2008
+Updated to 3/6/08 #2 build for Pfeffa fixes
+9:26 AM 7/8/2008
+Testing 7/7/08 dons build for 5th link
+5:06 PM 9/8/2008
+Testing dons build 8/20/08
+4:50 PM 9/19/2008
+Build from layne ambiguous test names fixed, 5link tests
+10:13 AM 12/2/2008
+moved to Pipe C
+\\harp\joe\Test\TestScripts\cmtest20\cmtest\tftpboot\diag_C\u-burn.cksums.2008081811
+10:44 AM 12/18/2008
+trying gregs SMP build of diags from /auto/build/gregk/f/qnx/cb/mc/diag.bin
+2:14 PM 1/6/2009
+Test build of Diags diag.bin.2009010514
+1:21 PM 1/7/2009
+Test Build diag.bin.2009010711
+2:18 PM 1/12/2009
+Test Build diag.bin.2009011212
+4:46 PM 1/27/2009
+Test buid diag.bin.2009012011

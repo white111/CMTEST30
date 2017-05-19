@@ -1,0 +1,27 @@
+################################################################################
+#
+# Module:      Order_entry.dat
+#
+# Author:      Joe White
+#
+# Descr:       Mac Address Assignemnt
+#
+# Version:    1.0  $Id: MAC_Assign.dat,v 1.2 2008/02/20 22:03:49 joe Exp $
+#
+# Changes:    First Release  12/05/05
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+<Alert>	"Enter the Information requested:"
+
+<Exec>	AssignMac
+
+<Msg>	"Done"
+
+<End>

@@ -1,0 +1,192 @@
+################################################################################
+#
+# Module:      Chassis_Config.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Chassis configuration test
+#
+# Version:    2.8 $Id: Chassis_Post_BI.dat,v 1.19.4.2 2012/02/10 05:55:25 joe Exp $
+#
+# Changes:    Added Check IPMI_Chassis.inc 02/16/06
+#			  Added MC and GLC memory checks 05/18/06
+#			  Work in progress for 3.0 HA release
+#			  Added Configuration_test.inc  8/21/08
+#			  Added ISSU enable 1/14/08
+#			 2/13/09 Booting from HD only
+#			  3/12/09 Moved Show Ship Config last possible step
+#			 06/3/10 Added First boot of Dual IMC
+#			 07/14/10 Added packet gap change for intermittent trafic failures(same as BI)
+#			 01/14/11 Added Potentia/Psoc checks
+#			 12/19/11 Added Power Cycling for ISSI issue
+#			 01/4/12 Removed Power Cycling for ISSI issue - Separate process added
+#
+# Includes:  Check_POST_IMC.inc
+#			 tftp_boot_imc_diag.inc
+#			 check_fabric.inc
+#			 Internal_Snake_setup.inc
+#			 tftpcopy_stoke_config.inc
+#		 	 Show_Card_Stoke.inc
+#		 	 Update_all.inc
+#		 	 Show_Card_Stoke.inc
+#			 Show_Env_Stoke.inc
+#			 Check_Software_version.inc
+#			 Clean_IMC_drives.inc
+#			 Show_Env_Alarm_Stoke.inc
+#			 Check_IPMI_Chassis.inc
+#
+# Still ToDo:
+#              - Fix intermmittent Traffic failures
+#              - Add memory test on commands
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+#<Msg>		"Turning off UUT Power ..."
+#<Power>		OFF
+<Sleep>		5
+#<Exec>		Init_HA_Port
+<Msg>		"Turning on UUT Power ..."
+<ETTC>		2500
+<Power>		ON
+<Include>	Stop_stoke_bootloader.inc
+<Include>	Firstboot_DualIMC.inc
+<Include>	tftp_boot_imc_diag.inc
+
+
+
+
+<Msg>		"Get System serial numbers"
+<Timeout>	60
+
+#Fix for Alarm incorrect rev
+<sendslow>		"if (pfeffa rd i2c 9501 alarm1 tlv 0 | grep "18\.1") then (pfeffa wr i2c 9501 alarm1 tlv 0 h 00 00 00 0E 00 0C 00 01) fi"
+<wait>
+<GetData>
+
+<Send>		"pfeffa show mfg"
+<Wait>
+<GetData>	ShowMFG
+<Include>	Set_Fan_Speed.inc
+
+#<Msg>    "Check Fail Flags:"
+# <Msg>     $Exit_On_Error
+# <Msg>     $Exit_On_Timeout
+
+# <Msg>      "Set Stop On Error"
+
+#<Set>       $Exit_On_Error
+#<Set>       $Exit_On_Timeout
+
+# <Msg>    "Check Fail Flags:"
+# <Msg>     $Exit_On_Error
+# <Msg>    $Exit_On_Timeout
+
+<Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>		Init_HA_Port
+</Bypass>
+
+<Include>	tftpcopy_stoke_diag.inc
+#
+##### Update Start
+<Include>	Check_Potentia.inc
+<Include>	Update_all.inc
+#<Include>	Onscript_Start_Pwr_cycle.inc
+#Flash update causing instability
+<Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	cfint_boot_diag.inc
+
+<Sleep>		20
+#### Update End
+
+### Test Area Start
+
+
+
+<Include>	check_fabric.inc
+<Msg>	"Setting new interpacekt gap"
+#1) pfeffa r8 f1002c3c => F
+#2) pfeffa w8 f1002c3c E  (Disable port 2)
+#3) pfeffa r8 f1002c0c => 6
+#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+#5) pfeffa w8 f1002c3c F (Enable port)
+<Send>		"pfeffa r8 f1002c3c"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c E"
+<Wait>
+<Send>		"pfeffa r8 f1002c0c"
+<Wait>
+<Send>		"pfeffa w8 f1002c0c 7"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c F"
+<Wait>
+<Include>	Internal_Snake_setup.inc
+<Include>   Clear_Disco.inc
+<Include>	Onscript_Start_BI.inc
+<Include>	BI_loopbacktest.inc
+<Include>	Onscript_Check.inc
+<Include>   Check_Disco.inc
+<Include>	Onscript_Start.inc
+<Include>	Onscript_Check.inc
+<Include>	Check_HDP_Log_Error.inc
+<Include>   Check_Disco.inc
+# Moved to End, HA load this causes problems with GLC mounts
+<Include>	Check_IPMI_Chassis.inc
+##### Test Area End
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	hd_boot_imc.inc
+
+<Sleep>		20
+
+#<Include>	Reload_all_slots.inc
+<Include>	Wait_Card_Stoke.inc
+#<Msg>		"Wait 120 Sec for cards to come ready"
+#<Sleep>		120
+
+<Include>	Enable_ISSU.inc
+<Include>	Check_Software_version.inc
+
+<Include>   HA_Switchover.inc
+
+<Include>	Show_Card_Stoke.inc
+
+<Include>	Show_Env_Stoke.inc
+
+
+<Include>	Show_Mem_Stoke.inc
+<Include>   Ship_config.inc
+<Include> 	Configuration_test.inc
+<Include>	Clean_IMC_drives.inc
+<Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>	Swap_cons
+			<Include>	Clean_IMC_drives.inc
+			<Exec>	Swap_cons
+</Bypass>
+
+<Include>	Check_Log_Alarm.inc
+<Include>	Check_Log_Error.inc
+<Include>   Show_Ship_config.inc
+#<Msg>		"Show_Env_Alarm_Stoke.inc Bypassed for development"
+<Include>	Show_Env_Alarm_Stoke.inc
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+<End>

@@ -1,0 +1,351 @@
+################################################################################
+#
+# Module:      Chassis_BI.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Burn-in
+#
+# Version:    2.9 $Id: Chassis_BI.dat,v 1.22 2011/05/26 19:31:26 joe Exp $
+#
+# Changes:    Added <GetData>  12/05/05
+#			  Added MC/GLC reboots  12/9/05
+#			  Added Onscript  02/22/06
+#			  Added MC On script, Reved GLC On script
+#			  Updated for 2.0R1 05/02/06
+#			  Updated for 3.0 8/14/06
+#			  Release for 4.0.  Traffic and background memory/drive tests
+#			  can not run concurently in BI, EXT or ORT
+#			  Added Configuration_test.inc  8/21/08
+#			  Changed Loop time to 8 Hours(Currenly about 4 hours testing out side of loop)
+#			 2/13/09 Booting from HD only
+#		     06/16/09 Removed Clock check dur to bugs in fedora
+#            10/07/09 Removed Onscript except full scan
+#			 04/20/10 Added First boot of Dual IMC, Added Onscript back(4.5 Bug only)
+#		     02/08/10 , Added Onscript back in BI loop(4.5 Bug only)
+#
+# Includes:  cfint_boot_diag_imc.inc
+#			 check_fabric.inc
+#			 Internal_Snake_setup.inc
+#			 BI_loopbacktest.inc
+#			 Modified while trying reboots on MC and GLC - Now removed
+#			 Added Power off via Pems
+#			 Added Fan speed control based on Station testctrl.cfg
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+<ETTC>		43500
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_bootloader.inc
+<Include>	Firstboot_DualIMC_BI.inc
+<Include>	cfint_boot_diag.inc
+
+<Sleep>		20
+
+
+
+#Check if IMC Slot 0 in Standby
+<Send>  "pfeffa r8 F4000028"
+<Wait>
+#<CheckData>	"F4000028   01"
+<GetData> Check_IMC_0_Standby
+<Bypass>	$HA_Session
+ 	<Msg>		" Found Slot 0 IMC in Standby, Boot Stok OS to Clear "
+	<Send>		"pfeffa w8 f400002b 11"
+	<Wait>
+
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+
+	<TimeOut>	120
+	<Send>		"reset"
+	<Include>	Stop_stoke_bootloader.inc
+	<Msg>		"Booting from Internal Compact Flash"
+	<Include>	hd_boot_imc.inc
+
+	<Sleep>		20
+	<Include>	Wait_Card_Stoke.inc
+	<Msg>		"Restart System"
+	<Send>		"reload now"
+	<WaitFor>	'(yes/[no])'
+	<Send>		"yes"
+	<Sleep>		1
+	<Send>		"yes"
+	<TimeOut>	120
+
+	<Include>	Stop_stoke_bootloader.inc
+	<Include>	cfint_boot_diag.inc
+</Bypass>
+
+<Msg>		"Get System serial numbers"
+<Timeout>	60
+<Send>		"pfeffa show mfg"
+<Wait>
+<GetData>	ShowMFG
+
+<Bypass>	$Slot_INST_1_IMC_GBL
+    		<Msg>	"Wait for Slot 1 IMC"
+			<Send>	'waitfor /net/nv-1-0/stoke/bin/diag/mc.setup.fabsnake 100'
+	   		<Wait>
+			<Exec>		Init_HA_Port
+</Bypass>
+# 	 	 <Include>	tftpcopy_stoke_diag.inc
+<Include>	Set_Fan_Speed.inc
+
+# Moved to End, HA load this causes problems with GLC mounts
+<Include>	Check_IPMI_Chassis.inc
+
+
+<Include>	Reset_all_slots.inc
+
+
+<Msg>		"Reset IMC"
+
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Send>		"reset"
+<TimeOut>	60
+<Prompt>	"Stoke>>"
+<Send>		"reset board"
+<Include>	Stop_stoke_bootloader.inc
+
+<Include>	hd_boot_imc.inc
+
+<Sleep>		10
+<Include>	Wait_Card_Stoke.inc
+<Include>   Ship_config.inc
+<Include>	Check_Diag_Jumper.inc
+
+
+<Bypass>	$HA_Session
+		<Msg>	"Checking Standby IMC"
+		<Exec>	Swap_cons
+		<Prompt> "Stoke[local]-STANDBY#"
+		<Send>
+		<Wait>
+		<GetData>
+		<Exec>	Swap_cons
+		<Prompt> "Stoke[local]#"
+</Bypass>
+
+
+
+
+
+#<Msg>		"Disabled Show env"
+<Include>	Show_Env_Stoke_BI.inc
+<Msg>		"Check Log Eror Disabled..."
+#<Include>	Check_Log_Error.inc
+<Prompt>	"Stoke[local]#"
+<TimeOut>	5
+<Send>		'terminal length infinite'
+<Wait>
+<Msg>		"Show Environmental"
+<Send>		"show env"
+#<Waitfor>   "Environmental"
+<Wait>
+<GetData>
+
+<Include>	Show_Card_Stoke.inc
+
+<Msg>		"Restart System"
+<Send>		"reload now"
+<WaitFor>	'(yes/[no])'
+<Send>		"yes"
+<Sleep>		1
+<Send>		"yes"
+<TimeOut>	120
+
+<Include>	Stop_stoke_bootloader.inc
+
+
+<Include>	cfint_boot_diag.inc
+
+
+
+<Include>	check_fabric.inc
+<Include>	Set_Fan_Speed.inc
+ <Msg>	"Setting new interpacekt gap"
+#1) pfeffa r8 f1002c3c => F
+#2) pfeffa w8 f1002c3c E  (Disable port 2)
+#3) pfeffa r8 f1002c0c => 6
+#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+#5) pfeffa w8 f1002c3c F (Enable port)
+<Send>		"pfeffa r8 f1002c3c"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c E"
+<Wait>
+<Send>		"pfeffa r8 f1002c0c"
+<Wait>
+<Send>		"pfeffa w8 f1002c0c 7"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c F"
+<Wait>
+
+<Include>	Internal_Snake_setup.inc
+<Include>   Clear_Disco.inc
+<Include>	Onscript_Full_scan.inc
+<Include>	Check_HDP_Log_Error.inc
+<Include>   Check_Disco.inc
+<Include>	Onscript_Start_BI.inc
+<Include>	BI_loopbacktest.inc
+<Include>	Onscript_Check.inc
+<Include>   Check_Disco.inc
+<Include>	Onscript_Start.inc
+<Include>	Onscript_Check.inc
+<Include>	Check_HDP_Log_Error.inc
+<Include>   Check_Disco.inc
+#Loop 9 Hours
+<Loop>		32400
+##Loop 12 hours
+##43200
+#<Loop>      43200
+#<Loop>		900
+
+	# BI test goes here - waiting on Diags
+        <Msg>		"Rebooting system"
+       # Clear Boot fail count
+     <Send>		"pfeffa w8 f400002b 11"
+     <Wait>
+	<Bypass>	$HA_Session
+ 		<Send>		"pfeffa on 1 w8 f400002b 11"
+		<Wait>
+ 	 </Bypass>
+ 	 <TimeOut>	120
+     <Send>		"reset"
+
+  	<Prompt>	'#'
+ 	<Wait>
+ 	<Sleep>		20
+
+  	<Include>	Set_Fan_Speed.inc
+  	<Msg>	"Setting new interpacekt gap"
+	#1) pfeffa r8 f1002c3c => F
+	#2) pfeffa w8 f1002c3c E  (Disable port 2)
+	#3) pfeffa r8 f1002c0c => 6
+	#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+	#5) pfeffa w8 f1002c3c F (Enable port)
+	<Send>		"pfeffa r8 f1002c3c"
+	<Wait>
+	<GetData>
+	<Send>		"pfeffa w8 f1002c3c E"
+	<Wait>
+	<Send>		"pfeffa r8 f1002c0c"
+	<Wait>
+	<Send>		"pfeffa w8 f1002c0c 7"
+	<Wait>
+	<GetData>
+	<Send>		"pfeffa w8 f1002c3c F"
+	<Wait>
+
+	<Include>	Reset_all_slots.inc
+    <Include>	Internal_Snake_setup.inc
+    <Include>   Clear_Disco.inc
+    <Include>	Onscript_Full_scan.inc
+	<Include>	Check_HDP_Log_Error.inc
+	<Include>   Check_Disco.inc
+	<Include>	Onscript_Start_BI.inc
+	<Include>	BI_loopbacktest.inc
+	<Include>	Onscript_Check.inc
+	<Include>   Check_Disco.inc
+	#<Include>	Onscript_Start.inc
+	#<Include>	Onscript_Check.inc
+	<Include>	Check_HDP_Log_Error.inc
+	<Include>   Check_Disco.inc
+    <Send>
+    <Wait>
+
+
+
+ </Loop>
+
+
+	# BI test goes here - waiting on Diags
+        <Msg>		"Rebooting system"
+       # Clear Boot fail count
+     <Send>		"pfeffa w8 f400002b 11"
+     <Wait>
+	<Bypass>	$HA_Session
+ 		<Send>		"pfeffa on 1 w8 f400002b 11"
+		<Wait>
+ 	 </Bypass>
+ 	 <TimeOut>	120
+     <Send>		"reset"
+
+  	<Prompt>	'#'
+ 	<Wait>
+ 	<Sleep>		20
+
+  	<Include>	Set_Fan_Speed.inc
+	<Include>	Reset_all_slots.inc
+    <Include>	Internal_Snake_setup.inc
+    <Include>   Clear_Disco.inc
+    <Include>	Onscript_Full_scan.inc
+
+<Msg>		"BI Complete cleaning up"
+
+ <Sleep> 	60
+ <Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting from Internal Compact Flash"
+<Include>	hd_boot_imc.inc
+
+<Sleep>		20
+
+#<Include>	Reload_all_slots.inc
+<Include>	Wait_Card_Stoke.inc
+#<Msg>		"Wait 120 Sec for cards to come ready"
+#<Sleep>		120
+# Removing until Fedor Clock issue corrected <Include>   Ship_config.inc
+<Include> 	Configuration_test.inc
+<Include>	Show_Card_Stoke.inc
+<Include>	Show_Env_Stoke_BI.inc
+<Prompt>	"Stoke[local]#"
+<TimeOut>	5
+<Send>		'terminal length infinite'
+<Wait>
+<Msg>		"Show Environmental"
+<Send>		"show env"
+<Waitfor>   "Environmental"
+<Wait>
+<GetData>
+
+<Include>	Show_Card_Stoke.inc
+<Include>	Check_Log_Error_BI.inc
+<Include>   HA_Switchover.inc
+
+
+
+<Msg>		"Trigger breakers, Both pems should be powered off"
+<Include>	Shell_imc.inc
+#<Msg>		"Bypassed Breaker turnoff"
+<Send>		"pfeffa w8 f4000042 1"
+<Sleep> 	1
+<Send>
+<Msg>		"Check system is powered off"
+<GetData>
+
+
+
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+
+<End>

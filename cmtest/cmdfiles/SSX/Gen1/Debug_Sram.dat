@@ -1,0 +1,220 @@
+################################################################################
+#
+# Module:      Debug.dat
+#
+# Author:      Joe White
+#
+# Descr:       ISSI Power cylce Bench
+#
+# Version:    2.9 $Id: Debug.dat,v 1.22 2012/02/17 17:13:40 joe Exp $
+#
+# Changes:    Added <GetData>  12/05/05
+#			  Added MC/GLC reboots  12/9/05
+#			  Added Onscript  02/22/06
+#			  Added MC On script, Reved GLC On script
+#			  Updated for 2.0R1 05/02/06
+#			  Updated for 3.0 8/14/06
+#			  Release for 4.0.  Traffic and background memory/drive tests
+#			  can not run concurently in BI, EXT or ORT
+#			  Added Configuration_test.inc  8/21/08
+#			  Changed Loop time to 8 Hours(Currenly about 4 hours testing out side of loop)
+#			 2/13/09 Booting from HD only
+#		     06/16/09 Removed Clock check dur to bugs in fedora
+#            10/07/09 Removed Onscript except full scan
+#			 04/20/10 Added First boot of Dual IMC, Added Onscript back(4.5 Bug only)
+#		     02/08/10 , Added Onscript back in BI loop(4.5 Bug only)
+#
+# Includes:  cfint_boot_diag_imc.inc
+#			 check_fabric.inc
+#			 Internal_Snake_setup.inc
+#			 BI_loopbacktest.inc
+#			 Modified while trying reboots on MC and GLC - Now removed
+#			 Added Power off via Pems
+#			 Added Fan speed control based on Station testctrl.cfg
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+
+
+<Sleep>		5
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+<Include>	Stop_stoke_boot.inc
+
+<Sleep>		20
+<ETTC>		700
+<Msg>		"Test GLC"
+<Msg>		"Verify at Stoke>>.."
+<TimeOut>	5
+<Send>		""
+<WaitFor>	"Stoke>>"
+
+<Prompt>	">"
+<TimeOut>	5
+<Msg>		"Starting Noodle..."
+<Send>		"go ffe00100"
+<Wait>
+
+<Send>		"show version"
+<Wait>
+<GetData>
+
+#Dummy Read to syncronize Expect
+<Send>		"rd i2c U67 tlv"
+<Wait>
+
+<TimeOut>	10
+<Msg>		"Getting Product / Serial info ..."
+<Send>		"rd i2c U67 tlv"
+<Wait>
+<GetData>	Board
+
+
+
+#    # Stop any on Error
+
+ <Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>     $Exit_On_Timeout
+
+ <Msg>      "Set Stop On Error"
+
+<Set>       $Exit_On_Error
+<Set>       $Exit_On_Timeout
+
+ <Msg>    "Check Fail Flags:"
+ <Msg>     $Exit_On_Error
+ <Msg>    $Exit_On_Timeout
+
+ <Msg>		"Turning on UUT Power ..."
+<Power>		OFF
+<sleep>		5
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+
+ #Loop 10X ~ 300 Sec per loop
+#<Loop>		3000
+##Loop 12 hours
+##43200
+<Loop>      43200
+#<Loop>		900
+
+<Sleep>		5
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+
+<Include>	Stop_stoke_boot.inc
+
+<Sleep>		20
+<ETTC>		700
+<Msg>		"Test GLC"
+<Msg>		"Verify at Stoke>>.."
+<TimeOut>	5
+<Send>		""
+<WaitFor>	"Stoke>>"
+
+<Prompt>	">"
+<TimeOut>	5
+<Msg>		"Starting Noodle..."
+<Send>		"go ffe00100"
+<Wait>
+<Timeout>	60
+<Prompt>	"#"
+ <Msg>		"Booting IFS flash ..."
+<Send>		"boot flash"
+<Waitfor>	"Starting application"
+<Wait>
+<Send>
+<Wait>
+#For 3.0
+<Msg>		"Disable system reload"
+<Send>		"ls > /dev/shmem/system_noreload"
+<Wait>
+
+
+<Msg>		"IXP SRAM Tests..."
+<Msg>		"INIT SRAM Tests..."
+<Send>		"ixtest -i"
+<Wait>
+#<CheckdataX>    "error"
+#<CheckdataX>    "Error"
+#<CheckdataX>    "Error"
+<GetData>	Ixtest_I
+
+<Send>
+<Wait>
+
+<Timeout>	60
+<Msg>		"IXP SRAM Bank 0..."
+<Send>		"ixtest mt -s0 -p4"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+#<CheckDataX>	'failed'
+#<CheckDataX>	'Error'
+
+<Msg>		"IXP SRAM Bank 1..."
+#<Send>		"ixtest mt -s1 0 0x1000000"
+<Send>		"ixtest mt -s1 -p4"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+#<CheckDataX>	'failed'
+#<CheckDataX>	'Error'
+
+<Msg>		"IXP SRAM Bank 2 Bottom..."
+#<Send>		"ixtest mt -s2 -p4 0 0x1000000"
+<Send>		"ixtest mt -s2 -p4 0 0x7ffff0"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+#<CheckDataX>	'failed'
+#<CheckDataX>	'Error'
+
+<Msg>		"IXP SRAM Bank 2 TOP..."
+#<Send>		"ixtest mt -s2 -p4 0 0x1000000"
+<Send>		"ixtest mt -s2 -p4 0x800000 0x7ffff0"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+#<CheckDataX>	'failed'
+#<CheckDataX>	'Error'
+
+<Msg>		"IXP SRAM Bank 3 Bottom..."
+#<Send>		"ixtest mt -s3 -p4 0 0x1000000"
+<Send>		"ixtest mt -s3 -p4 0 0x7ffff0"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+#<CheckDataX>	'failed'
+#<CheckDataX>	'Error'
+
+<Msg>		"IXP SRAM Bank 3 Top..."
+#<Send>		"ixtest mt -s3 -p4 0 0x1000000"
+<Send>		"ixtest mt -s3 -p4 0x800000 0x7ffff0"
+<Wait>
+<GetData>
+<CheckData>	'Passed'
+#<CheckDataX>	'failed'
+#<CheckDataX>	'Error'
+
+ 	<power>		OFF
+ 	<Sleep>		6
+
+ </Loop>
+
+
+
+<End>

@@ -1,0 +1,342 @@
+################################################################################
+#
+# Module:      Chassis_BI_XGLC.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for Burn-in
+#
+# Version:    1.6 $Id: Chassis_BI_XGLC.dat,v 1.2 2012/02/17 17:13:41 joe Exp $
+#
+# Changes:    Created 12/1/11
+#			  Added fix to work with Mixed XLP revisions 8/6/12
+#			  6/10/13 Prompt changes in 6.1R2/13.1
+#			  Removed concurrent traffic and memory tests
+#			  Added concurent test 7/24/12 to test b1 parts
+#			  Added 4 Slot XGLC 10/30/13#
+#			  Changes for 13.1 Based Diags 8/4/14
+#			  removed first boot check 9/10/14
+#
+# Includes:
+#
+# Still ToDo:
+#             #<Include>	Check_IPMI_Chassis_XGLC.inc Not working with terminal server ??? 3/4/12
+#             #ypassed all resets in Reset_all_slots_XGLC
+#			  # problem diabling xlp0 overtemp after a reset
+#			  #<Include>	Reset_all_slots_XGLC.inc
+#			  Not running Snake and memory tests at he same time yet
+#			  added <Send>		'on -C 0 -p 7f ksh'  start shel on CPU 0
+#			  removed all reset
+#
+#            Copyright (c) 2005-2013 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+<ETTC>		53000
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_bootloader.inc
+#<Include>	Firstboot_DualIMC_BI.inc
+<Include>   hd_boot_diag_XGLC.inc
+
+<Sleep>		20
+
+
+
+<Include>	Get_System_Serial.inc
+<msg>		"wait 60 sec"
+<sleep>		60
+
+<Bypass>	$HA_Session_N
+ <Bypass>	$Slot_INST_1_IMC_GBL
+			<Exec>		Init_HA_Port
+ </Bypass>
+</Bypass>
+
+##Check if IMC Slot 0 in Standby
+#<Send>  "pfeffa r8 F4000028"
+#<Wait>
+##<CheckData>    "F4000028   01"
+#<GetData> Check_IMC_0_Standby
+#<Bypass>    $HA_Session
+#    <Msg>       " Found Slot 0 IMC in Standby, Boot Stok OS to Clear "
+#    <Send>      "pfeffa w8 f400002b 11"
+#    <Wait>
+
+#    <Send>      "pfeffa on 1 w8 f400002b 11"
+#    <Wait>
+
+#    <TimeOut>   120
+#    <Send>      "reset;reload"
+#    <Include>   Stop_stoke_bootloader.inc
+#    <Msg>       "Booting from Internal Compact Flash"
+#    <Include>   hd_boot_imc.inc
+
+#    <Sleep>     20
+#    <Include>   Wait_Card_Stoke.inc
+#    <Msg>       "Restart System"
+#    <Send>      "reload now"
+#    <WaitFor>   '(yes/[no])'
+#    <Send>      "yes"
+#    <Sleep>     1
+#    <Send>      "yes"
+#    <TimeOut>   120
+
+#    <Include>   Stop_stoke_bootloader.inc
+#    <Include>   hd_boot_diag_XGLC.inc
+#</Bypass>
+
+
+# Moved to End, HA load this causes problems with GLC mounts
+<Include>	Check_IPMI_Chassis_XGLC.inc
+
+
+
+
+   <Prompt>    '#'
+    <Sleep>     20
+
+<Include>	Set_Fan_Speed.inc
+ <Msg>	"Setting new interpacekt gap"
+#1) pfeffa r8 f1002c3c => F
+#2) pfeffa w8 f1002c3c E  (Disable port 2)
+#3) pfeffa r8 f1002c0c => 6
+#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+#5) pfeffa w8 f1002c3c F (Enable port)
+<Send>		"pfeffa r8 f1002c3c"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c E"
+<Wait>
+<Send>		"pfeffa r8 f1002c0c"
+<Wait>
+<Send> "pfeffa w8 f1002c0c 7"
+<Wait>
+<GetData>
+<Send>		"pfeffa w8 f1002c3c F"
+<Wait>
+
+	<msg>		"Sleep 360"
+	<Sleep>		360
+<Include>	check_fabric_XGLC.inc
+<Include>	Check_Power.inc
+    # Stop any on Error
+
+#<Msg>       "No Stop On Fail"
+# <Msg>    "Check Fail Flags:"
+# <Msg>     $Exit_On_Error
+# <Msg>     $Exit_On_Timeout
+
+# <Msg>      "Set Stop On Error"
+
+#<Set>       $Exit_On_Error
+#<Set>       $Exit_On_Timeout
+
+# <Msg>    "Check Fail Flags:"
+# <Msg>     $Exit_On_Error
+# <Msg>    $Exit_On_Timeout
+
+<Include>	Show_XGLC_CPLD.inc
+<Include>	Internal_Snake_setup_XGLC.inc
+<Include>	Disable_Overtemp_XGLC.inc
+<Include>   Clear_Disco_XGLC.inc
+<Include>	Onscript_Full_scan_XGLC.inc
+<Include>	Check_HDP_Log_Error_XGLC.inc
+<Include>   Clear_Disco_XGLC.inc
+<Include>	BI_loopbacktest_XGLC.inc
+<Include>   Onscript_Start_BI_XGLC.inc
+<Include>   Onscript_Check_XGLC.inc
+<Include>   Check_Disco_XGLC.inc
+<Include>	Check_HDP_Log_Error_XGLC.inc
+<Include>   Check_Disco_XGLC.inc
+<Include>	Show_XGLC_CPLD.inc
+#Loop 10 Hours
+<Loop>		36400
+	##Loop 12 hours
+	##43200
+	#<Loop>      43200
+	#<Loop>		900
+
+    <Msg>       "Rebooting system"
+       # Clear Boot fail count
+    <Send>      "pfeffa w8 f400002b 11"
+    <Wait>
+    <Bypass>    $HA_Session
+        <Send>      "pfeffa on 1 w8 f400002b 11"
+        <Wait>
+     </Bypass>
+     <TimeOut>  120
+     <Send>     "reset;reload"
+
+    <Prompt>    '#'
+    <Wait>
+    <Sleep>     30
+    <msg>       "Dropping KSH priority to 7f"
+    <Send>      'on -p 7f ksh'
+    <Wait>
+    <GetData>
+
+  	<Include>	Set_Fan_Speed.inc
+  	<Msg>	"Setting new interpacekt gap"
+	#1) pfeffa r8 f1002c3c => F
+	#2) pfeffa w8 f1002c3c E  (Disable port 2)
+	#3) pfeffa r8 f1002c0c => 6
+	#4) pfeffa w8 f1002c0c 7  ( max gap 3bits)
+	#5) pfeffa w8 f1002c3c F (Enable port)
+	<Send>		"pfeffa r8 f1002c3c"
+	<Wait>
+	<GetData>
+	<Send>		"pfeffa w8 f1002c3c E"
+	<Wait>
+	<Send>		"pfeffa r8 f1002c0c"
+	<Wait>
+	<Send>		"pfeffa w8 f1002c0c 7"
+	<Wait>
+	<GetData>
+	<Send>		"pfeffa w8 f1002c3c F"
+	<Wait>
+
+	<Include>	Reset_all_slots_XGLC.inc
+	<msg>		"Sleep 120"
+	<Sleep>		120
+	<Include>	Disable_Overtemp_XGLC.inc
+	<Include>	Show_XGLC_CPLD.inc
+	#<MSG>		"Marging Disabled"
+ #	<include> 	Margin_Nom_XGLC.inc
+    <Include>	Internal_Snake_setup_XGLC.inc
+    <Include>   Clear_Disco_XGLC.inc
+    <Include>   Check_HDP_Log_Error_XGLC.inc
+    <Include>   Check_Disco_XGLC.inc
+    <Include>   Onscript_Start_BI_XGLC.inc
+	<Include>	BI_loopbacktest_XGLC.inc
+	#<Include>   Onscript_Start_BI_XGLC.inc
+    <Include>   Onscript_Check_XGLC.inc
+	<Include>   Check_Disco_XGLC.inc
+	<Include>	Check_HDP_Log_Error_XGLC.inc
+	<Include>   Check_Disco_XGLC.inc
+	<Include>	Show_XGLC_CPLD.inc
+
+
+    <include> 	Margin_High_XGLC.inc
+    <Include>   Check_HDP_Log_Error_XGLC.inc
+    <Include>   Check_Disco_XGLC.inc
+    <Include>	Show_XGLC_CPLD.inc
+    <Include>   Onscript_Start_BI_XGLC.inc
+	<Include>	BI_loopbacktest_XGLC.inc
+	#<Include>   Onscript_Start_BI_XGLC.inc
+    <Include>   Onscript_Check_XGLC.inc
+	<Include>   Check_Disco_XGLC.inc
+	<Include>	Check_HDP_Log_Error_XGLC.inc
+	<Include>   Check_Disco_XGLC.inc
+	<Include>	Show_XGLC_CPLD.inc
+
+    <include> 	Margin_Low_XGLC.inc
+    <Include>   Check_HDP_Log_Error_XGLC.inc
+    <Include>   Check_Disco_XGLC.inc
+    <Include>	Show_XGLC_CPLD.inc
+    <Include>   Onscript_Start_BI_XGLC.inc
+	<Include>	BI_loopbacktest_XGLC.inc
+    #<Include>   Onscript_Start_BI_XGLC.inc
+    <Include>   Onscript_Check_XGLC.inc
+	<Include>   Check_Disco_XGLC.inc
+	<Include>	Check_HDP_Log_Error_XGLC.inc
+	<Include>   Check_Disco_XGLC.inc
+	<Include>	Show_XGLC_CPLD.inc
+    <Send>
+    <Wait>
+	<include> 	Margin_Nom_XGLC.inc
+ </Loop>
+
+<Msg>		"Rebooting system"
+# Clear Boot fail count
+  <Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+<Send>		"pfeffa on 1 w8 f400002b 11"
+<Wait>
+</Bypass>
+<TimeOut>	120
+<Send>		"reset;reload"
+
+<Prompt>	'#'
+<Wait>
+<msg>		"Sleep 120"
+<Sleep>		120
+<Include>	Disable_Overtemp_XGLC.inc
+<Include>	Internal_Snake_setup_XGLC.inc
+<Include>	Onscript_Full_scan_XGLC.inc
+<Include>	Show_XGLC_CPLD.inc
+<Include>	Check_Power.inc
+
+<Msg>		"BI Complete cleaning up"
+
+ <Sleep> 	60
+ <Msg>		"Reset IMC"
+<Send>		"pfeffa w8 f400002b 11"
+<Wait>
+<Bypass>	$HA_Session
+	<Send>		"pfeffa on 1 w8 f400002b 11"
+	<Wait>
+</Bypass>
+
+<TimeOut>	120
+<Send>		"reset;reload"
+<Include>	Stop_stoke_bootloader.inc
+<Msg>		"Booting From HD"
+<Include>	hd_boot_imc.inc
+
+##  Workaround for Mixing XLP revisons
+<Include>	Shell_imc.inc
+<send>		 "touch /hdp/mixed_fu_hw_rev"
+ <wait>
+ <send>		 "ls /hdp/mixed_fu_hw_rev"
+ <wait>
+ <GetData>
+ <Prompt>	'[local]#'
+ <send>		exit
+ <wait>
+
+<Sleep>		20
+<Include>	Enable_ISSU_XGLC.inc
+<Include>	Wait_Card_Stoke.inc
+<Include> 	Configuration_test_XGLC.inc
+<Include>	Show_Card_Stoke_XGLC.inc
+<Include>	Show_Env_Stoke_BI.inc
+<Prompt>	"[local]#"
+<TimeOut>	5
+<Send>		'terminal length infinite'
+<Wait>
+<Msg>		"Show Environmental"
+<Send>		"show env"
+<Waitfor>   "Environmental"
+<Wait>
+<GetData>
+
+<Include>	Show_Card_Stoke_XGLC.inc
+<Include>	Check_Log_Error_BI_XGLC.inc
+<Include>   HA_Switchover_XGLC.inc
+
+##  Workaround for Mixing XLP revisons
+<Include>	Shell_imc.inc
+<send>		 "rm /hdp/mixed_fu_hw_rev"
+ <wait>
+ <send>		 "ls /hdp/mixed_fu_hw_rev"
+ <wait>
+ <GetData>
+ <Prompt>	'[local]#'
+ <send>		exit
+ <wait>
+
+<Msg>		"Trigger breakers, Both pems should be powered off"
+<Include>	Shell_imc.inc
+#<Msg>		"Bypassed Breaker turnoff"
+<Send>      "pfeffa w8 f4000042 1"
+<Sleep>     1
+<Send>
+<Msg>       "Check system is powered off"
+<GetData>
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+
+<End>

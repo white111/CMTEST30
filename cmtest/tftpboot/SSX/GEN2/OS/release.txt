@@ -1,0 +1,298 @@
+################################################################################
+#
+# Module:      release.txt(diag)
+#
+# Author:      Joe White
+#
+# Descr:       Stoke Manufacturing Diags release Notes
+#
+# Version:   1.0  $Id: release.txt,v 1.1 2010/03/02 19:09:21 joe Exp $
+#
+# Changes:    Added Versioning
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2014 Stoke. All rights reserved.
+#
+################################################################################
+11:58 AM 7/7/2014  Officail release  \\harp\build\builder\13.1R5\2014062706\qnx\cb\mc
+\\harp\build\builder\13.1R5\2014062706\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\build\builder\13.1R5\2014062706\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\build\builder\13.1R5\2014062706\qnx\cb\mc\StokeOS-13.1R5->stokepkg.bin
+\\harp\build\builder\13.1R5\2014062706\qnx\cb\mc\\bootloader->booloader.bin
+\\harp\build\builder\13.1R5\2014062706\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+
+
+1:02 PM 10/30/2013 official release \\harp\build\builder\13.1R3S3\2013102516\qnx\cb\mc
+\\harp\build\builder\13.1R3S3\2013102516\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\build\builder\13.1R3S3\2013102516\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\build\builder\13.1R3S3\2013102516\qnx\cb\mc\StokeOS-13.1R3S3->stokepkg.bin
+\\harp\build\builder\13.1R3S3\2013102516\qnx\cb\mc\bootloader->booloader.bin
+\\harp\build\builder\13.1R3S3\2013102516\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+11:00 AM 8/28/2013   New Diag Qual \\harp\build\builder\13.1\2013082718\qnx\cb\mc
+\\harp\build\builder\13.1\2013082718\qnx\cb\lc\xglcdiag.bin->xglcflashdiag.bin
+/auto/build/builder/xglc-programmables/p4080/agile/rcw_diag_bloader_fman_uboot_ver17.bin
+    ./combo_func rcw_diag_bloader_fman_uboot_ver17.bin
+    /auto/build/builder/xglc-programmables/p4080/rcw_xglc_06.bin
+   /auto/build/builder/13.1/2013082718/qnx/cb/lc/xglcdiag.bin
+   /auto/build/builder/13.1/2013082718/qnx/cb/mc/bootloader2
+  /auto/build/builder/xglc-programmables/p4080/fsl_fman_ucode_P4080_101_6.bin
+  /auto/build/builder/uboot/6.0/2013030510/u-boot-xglc.bin
+
+
+4:27 PM 9/10/2013 official release /auto/build/builder/13.2R1/2013083011/qnx/cb/mc/StokeOS-13.2R1
+\\harp\build\builder\13.2R1\2013083011\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\build\builder\13.2R1\2013083011\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\build\builder\13.2R1\2013083011\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin
+\\harp\build\builder\13.2R1\2013083011\qnx\cb\mc\bootloader->booloader.bin
+\\harp\build\builder\13.2R1\2013083011\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+9:41 AM 8/28/2013 official release /auto/build/builder/13.1R3/2013081419/qnx/cb/mc
+\\harp\build\builder\13.1R3\2013081419\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\build\builder\13.1R3\2013081419\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\build\builder\13.1R3\2013081419\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin
+\\harp\build\builder\13.1R3\2013081419\qnx\cb\mc\bootloader->booloader.bin
+\\harp\build\builder\13.1R3\2013081419\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+3:39 PM 7/18/2013 Offical release /auto/build/builder//13.1R2/2013071610/qnx/cb/mc/StokeOS-13.1R2
+\\harp\build\builder\13.1R2\2013071610\qnx\cb\boot.nonfs.bin->stoke.bin
+\\harp\build\builder\13.1R2\2013071610\qnx\cb\\bootloader2-bootloader2.bin
+\\harp\build\builder\13.1R2\2013071610\qnx\cb\StokeOS-13.1R1->stokepkg.bin
+\\harp\build\builder\13.1R2\2013071610\qnx\cb\bootloader->booloader.bin
+\\harp\build\builder\13.1R2\2013071610\qnx\lc\boot.nonfs.bin-> stoke.glc.bin
+
+11:29 AM 7/8/2013 Offical release \\harp\Build\builder\13.1R2\2013070318\qnx\cb\mc
+\\harp\Build\builder\13.1R2\2013070318\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\13.1R2\2013070318\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\Build\builder\13.1R2\2013070318\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin
+\\harp\Build\builder\13.1R2\2013070318\qnx\cb\mc\bootloader->booloader.bin
+\\harp\Build\builder\13.1R2\2013070318\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+5:50 PM 7/1/2013  Offical release /auto/build/builder/13.1R2/2013070114/qnx/cb/mc/StokeOS-13.1R2
+\\harp\Build\builder\13.1R2\2013070114\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\13.1R2\2013070114\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\Build\builder\13.1R2\2013070114\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin
+\\harp\Build\builder\13.1R2\2013070114\qnx\cb\mc\bootloader->booloader.bin
+\\harp\Build\builder\13.1R2\2013070114\qnx\cb\mc\lc\boot.nonfs.bin-> stoke.glc.bin
+
+10:49 AM 7/1/2013 \\harp\Build\builder\13.1R2\2013063018\qnx\cb\mc
+\\harp\Build\builder\13.1R2\2013063018\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\13.1R2\2013063018\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\Build\builder\13.1R2\2013063018\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin
+\\harp\Build\builder\13.1R2\2013063018\qnx\cb\mc\bootloader->booloader.bin
+\\harp\Build\builder\13.1R2\2013063018\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+
+Moved u-boot.bin from the StokeOS-6.1R2 package to stokboot.bin
+4:32 PM 5/28/2013 /auto/build/builder/13.1R1\2013050410\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin  from http://stoke-central.stoke.com/index.php/Current_Shipping_Releases
+
+2:30 PM 5/17/2013 \\harp\Build\builder\13.1R1\2013050410\qnx\cb\mc - released to pipe B
+\\harp\Build\builder\13.1R1\2013050410\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\13.1R1\2013050410\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\Build\builder\13.1R1\2013050410\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\13.1R1\2013050410\qnx\cb\mc\StokeOS-13.1R1->stokepkg.bin
+\\harp\Build\builder\13.1R1\2013050410\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+5:34 PM 1/10/2013 \\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc - Testing new spansion device
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc\tokeOS-6.0B3S1->stokepkg.bin
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc\\bootloader->booloader.bin
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\mc
+
+\\harp\Build\builder\6.0B3S1\2013010419\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+
+
+1:30 PM 12/17/2012 \\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc
+\\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc\StokeOS-6.0B3->stokepkg.bin
+\\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc\boot.nonfs.bin->stoke.bin
+\\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc\bootloader->booloader.bin
+\\harp\Build\builder\6.0B3\2012112214\qnx\cb\mc\bootloader2-bootloader2.bin
+\\harp\Build\builder\6.0B3\2012112214\qnx\cb\lc\boot.nonfs.bin-> stoke.glc.bin
+
+
+7:57 AM 9/13/2012  Release for Flash Masters
+\\harp\Build\builder\xglc-programmables\p4080\rcw_xglc_06.bin->rcw_xglc.bin
+\\harp\Build\builder\xglc-programmables\p4080\agile\rcw_diag_bloader_fman_uboot_ver10.bin->flashimg.bin
+\\harp\Build\builder\6.0\2012091119\qnx\cb\mc\stokeOS-6.0->   stokepkg.bin
+\\harp\Build\builder\6.0\2012091119\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012091119\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012091119\qnx\cb\mc\boo.nonfs.bin -> stoke.bin
+\harp\Build\builder\uboot\6.0\2012083014\uboot.bin -> stokeboot.bin
+\\harp\Build\builder\uboot\6.0\2012083014\uboot-xglc.bin -> stokebootxglc.bin
+\\harp\Build\builder\6.0\2012091119\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+
+
+4:40 PM 9/5/2012  New diag build, XLPB1 still needs 6.0 main
+\\harp\Build\builder\6.0\2012090419\qnx\cb\mc\stokeOS-6.0->   stokepkg.bin
+\\harp\Build\builder\6.0\2012090419\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012090419\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012090419\qnx\cb\mc\boo.nonfs.bin -> stoke.bin
+\\harp\Build\builder\uboot\6.0\2012083014\uboot.bin -> stokeboot.bin
+\\harp\Build\builder\uboot\6.0\2012083014\uboot-xglc.bin -> stokebootxglc.bin
+\\harp\build\builder\6.0\2012090419\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+
+
+4:21 PM 8/2/2012
+\\harp\Build\builder\6.0\2012080119\qnx\cb\mc  fixes for XLPmemdiag
+\\harp\Build\builder\6.0\2012080119\qnx\cb\mc\StokeOS-6.0->   stokepkg.bin
+\\harp\Build\builder\6.0\2012080119\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012080119\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012080119\xlp\xlp.rootfs.gz
+
+1:30 PM 7/17/2012  XLP B1
+\\harp\Build\builder\6.0\2012071619\qnx\cb\mc\StokeOS-6.0->   stokepkg.bin
+\\harp\Build\builder\6.0\2012071619\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012071619\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012071619\qnx\cb\mc\boot.nonfs.bin -> stoke.bin
+\\harp\Build\builder\6.0\2012071619\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+\\harp\Build\builder\6.0\2012071619\xlp\xlp.rootfs.gz
+
+
+2:18 PM 6/6/2012  Sample release 6.0B2 \\harp\Build\builder\6.0\2012060519
+\\harp\Build\builder\6.0\2012060519\qnx\cb\mc\StokeOS-6.0->   stokepkg.bin
+\\harp\Build\builder\6.0\2012060519\qnx\cb\mc\boot.nonfs.bin -> stoke.bin
+\\harp\Build\builder\6.0\2012060519\xlp\xlp.rootfs.gz
+
+
+4:09 PM 5/31/2012 \\harp\Build\builder\6.0\2012052519
+\\harp\Build\builder\6.0\2012052519\qnx\cb\mc\StokeOS-6.0 -> stoke.pkg
+\\harp\Build\builder\6.0\2012052519\qnx\cb\mc\diag.bin -> diag_xglc.bin
+\\harp\Build\builder\6.0\2012052519\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012052519\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012052519\xlp\xlp.rootfs.gz
+\\harp\Build\builder\xglc-programmables\p4080\agile\rcw_diag_bloader_fman_uboot_ver9.bin->flashimg.bin.
+\\harp\Build\builder\uboot\6.0\2012053013\u-boot-xglc.bin->stokebootxglc.bin
+\\harp\Build\builder\uboot\6.0\2012053013\u-boot.bin->stokeboot.bin
+
+
+
+4:26 PM 2/6/2012 \\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc
+\\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc\diag.bin -> diag_xglc.bin
+
+\\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc\StokeOS-6.0B1S1 -> stoke.pkg
+\\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc
+\\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\mc
+\\harp\Build\builder\6.0B1S1\2012020514\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+\\harp\Build\builder\6.0B1S1\2012020514\xlp\xlp.rootfs.gz
+
+
+\\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+
+Stoke[local]#nv/lib/ipc/ipc_msg.c:1047 (int16_t)msg->imh_msg_ver == ipc_ver_get0
+NSM: Received CardMgr(12) version 1, expected 2; msg: 0x481abdfc, pmsg: 0x481abe
+
+7:53 AM 2/3/2012 \\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc
+\\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc\boot.nonfs.bin -> Stoke.bin
+\\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0B1S1\2012020221\qnx\cb\mc\StokeOS-6.0B1S1 -> stoke.pkg
+\\harp\Build\builder\6.0B1S1\2012020221\xlp\xlp.rootfs.gz
+
+5:30 PM 1/24/2012 \\harp\Build\builder\xglc-programmables\p4080\agile ( Same files in rcw_diag_bloader_fman_uboot_ver8.bin.  **** Released for Flash Mastering ****
+sudo ~rboreda/code/combo_func agile/
+\\harp\Build\builder\xglc-programmables\p4080\rcw_xglc_pcie_100mz_xlprc_4uart_05.bin -> rcw_xglc.bin
+\\harp\Build\builder\xglc-programmables\p4080\xglcdiag_2012011901.bin bootloader2_2012011901.bin -> bootloader2.bin
+\\harp\Build\builder\xglc-programmables\p4080\fsl_fman_ucode_P4080_101_6.bin -> ucode.bin
+\\harp\Build\builder\xglc-programmables\p4080\stoke_xglc_20120124.img ->stokebootxglc.bin
+
+
+
+5:30 PM 1/24/2012 \\harp\Build\builder\xglc-programmables\p4080\agile
+\\harp\Build\builder\xglc-programmables\p4080\agile\rcw_diag_bloader_fman_uboot_ver8.bin -> flashimg.bin  CHKSUM32 BD1E5CE4
+10:29 PM 1/22/2012 \\harp\Build\builder\xglc-programmables\p4080\agile
+\\harp\Build\builder\xglc-programmables\p4080\agile\rcw_diag_bloader_fman_uboot_ver7.bin -> flashimg.bin CHKSUM32 903A08A8
+9:29 PM 1/19/2012 \\harp\Build\builder\6.0\2012011901\qnx\cb\mc
+\\harp\Build\builder\6.0\2012011901\qnx\cb\mc\stokeOS-6.0 -> stokepkg.bin -> StokeOS-6.0
+\\harp\Build\builder\6.0\2012011901\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012011901\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012011901\qnx\cb\mc\boot.nonfs.bin -> stoke.bin
+\\harp\Build\builder\6.0\2012011901\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+\\harp\Build\builder\6.0\2012011901\xlp\xlp.rootfs.gz
+
+
+
+
+7:36 AM 1/12/2012 \\harp\Build\builder\6.0\2012011201\qnx\cb\mc
+\\harp\Build\builder\6.0\2012011201\qnx\cb\mc\stokeOS-6.0 -> stokepkg.bin -> StokeOS-6.0
+\\harp\Build\builder\6.0\2012011201\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2012011201\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2012011201\qnx\cb\mc\boot.nonfs.bin -> stoke.bin
+\\harp\Build\builder\6.0\2012011201\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+\\harp\Build\builder\6.0\2012011201\xlp\lp.rootfs.gz
+
+
+3:29 PM 1/3/2012 \\harp\Build\builder\6.0\2011122301\qnx\cb\mc ### XLP root directory missing
+\\harp\Build\builder\6.0\2011122301\qnx\cb\mc\stokeOS-6.0 -> stokepkg.bin -> StokeOS-6.0
+\\harp\Build\builder\6.0\2011122301\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2011122301\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2011122301\qnx\cb\mc\boot.nonfs.bin -> stoke.bin
+\\harp\Build\builder\6.0\2011122301\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+\\harp\Build\builder\6.0\2011122301\xlp\xlp.rootfs.gz
+\\harp\Build\builder\xglc-programmables\latest\xlp-r3-boot-spi-20111219.bin - > xlp-spi.bin
+
+10:35 AM 12/19/2011 - Flash diag release candidate
+\\harp\Build\builder\6.0\2011121701\qnx\cb\mc\stokeOS-6.0 -> stokepkg.bin -> StokeOS-6.0
+\\harp\Build\builder\6.0\2011121701\qnx\cb\mc\bootloader -> bootloader.bin
+\\harp\Build\builder\6.0\2011121701\qnx\cb\mc\bootloader2 -> bootloader2.bin
+\\harp\Build\builder\6.0\2011121701\qnx\cb\mc\boot.nonfs.bin -> stoke.bin
+\\harp\Build\builder\6.0\2011121701\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+\\harp\Build\builder\6.0\2011121701\xlp\xlp.rootfs.gz
+\\harp\Build\builder\uboot\6.0\2011120515\u-boot-xglc.bin ->stokebootxglc.bin
+\\harp\Build\builder\uboot\6.0\2011120515\u-boot.bin -> stokeboot.bin
+
+9:45 AM 12/6/2011
+\\harp\Build\builder\uboot\6.0\2011120515\u-boot-xglc.bin->stokebootxglc.bin
+
+5:19 PM 11/16/2011  6.0B1  \\harp\Build\builder\6.0B1\2011111023\qnx\cb\mc
+Built Name -> cmtest name -> SSX name(if needed)
+qnx\cb\mc\boot.nonfs.bin ->-> stoke.bin
+CRC32:
+\qnx\cb\mc\StokeOS-6.0 -> stokepkg.bin -> StokeOS-6.0
+CRC32:
+qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+CRC32:
+xlp\xlp.rootfs.gz -> xlp.rootfs.gz -> xlp.rootfs.gz
+CRC32:
+\qnx\cb\mc\booloader -> bootloader.bin
+CRC32:
+cb\mc\bootloader2 -> bootloader2.bin
+CRC32:
+
+
+
+9:43 AM 11/10/2011
+\\harp\Build\builder\6.0\2011110901\\qnx\cb\mc\boot.bin ->-> stoke.bin
+CRC32: 2B44E9DC
+\\harp\Build\builder\6.0\2011110901\\qnx\cb\mc\StokeOS-6.0 -> stokepkg.bin -> StokeOS-6.0
+CRC32: A0CA7AB9
+\\harp\Build\builder\6.0\2011110901\qnx\cb\lc\boot.nonfs.bin -> stoke.glc.bin
+CRC32: D6283883
+\\harp\Build\builder\6.0\2011110901\xlp\xlp.rootfs.gz -> xlp.rootfs.gz -> xlp.rootfs.gz
+CRC32:64F60C9A
+\\harp\Build\builder\6.0\2011110901\qnx\cb\mc\booloader -> bootloader.bin
+CRC32: 50A0E422
+\\harp\Build\builder\6.0\2011110901\qnx\cb\mc\bootloader2 -> bootloader2.bin
+CRC32: 52E0D701
+
+\\harp\Build\builder\uboot\6.0\2011092312\u-boot.bin -> stokeboot.bin
+CRC32: 8AD12138
+\\harp\Build\builder\uboot\6.0\2011092312\u-boot-xglc.bin -> stokebootxglc.bin
+CRC32:60808E8D
+\\harp\Build\builder\xglc-programmables\latest\rcw_xglc_pcie_100mz_xlprc_04.bin -> rcw_xglc.bin
+CRC32: 437572C9
+\\harp\Build\builder\xglc-programmables\latest\xglcdiag.bin -> xglcflashdiag.bin
+CRC32: 091BAD75
+\\harp\Build\builder\xglc-programmables\latest\xlp-r2-boot-spi-20110831.bin -> xlp-spi.bin
+CRC32: 2894FEA3
+\\harp\Build\builder\xglc-programmables\latest\fsl_fman_ucode_P4080_101_6.bin -> ucode.bin
+CRC32: 6E7F9197
+\\harp\Build\builder\noodle\noodle.bin.2009082613 -> noodle.bin  (not verified, using original in mfg directories)
+CRC32: 3CD84214
+#Entire Flash
+\\harp\Build\builder\xglc-programmables\p4080\agile\rcw_diag_bloader_fman_uboot_ver5.bin => flashimg.bin

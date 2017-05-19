@@ -1,0 +1,26 @@
+################################################################################
+#
+# Module:      Release.id
+#
+# Author:      Joe White
+#
+# Descr:       The release name for Cmtest
+#
+# Version:    1.0 $Id: Release.id,v 1.32 2012/02/17 17:13:39 joe Exp $
+#
+# Changes:    Release 083011
+#
+
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2015 Mavenir. All rights reserved.
+#
+################################################################################
+Version	= 3.0_Development
+Pipe	= i
+Updated	= 02-05-15
+Status	= 13.1R5_Release
+# 3.0	cmtest mods to support multiple products
+

@@ -1,0 +1,18 @@
+# .cmtestrc 2005/11/17-3
+# .cmtestrc 2006/06/23
+
+OS="Linux"
+PATH=$PATH:$HOME/bin
+LIB=$HOME/lib
+PS1="\u@\h:[\w]> "
+
+SIGMA_QUEUE="/var/local/cmtest/SigmaProbe"
+
+CmTest_Release_Path="/var/local/cmtest/dist"
+CmTest_Release_Pipe='e'
+
+PATH="/usr/local/cmtest/$CmTest_Release_Pipe/bin:/var/local/cmtest/dist/bin:$PATH"
+
+export PATH OS PS1 SIGMA_QUEUE CmTest_SCCS_Path CmTest_Release_Path CmTest_Release_Pipe
+
+

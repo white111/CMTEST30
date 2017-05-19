@@ -1,0 +1,45 @@
+################################################################################
+#
+# Module:      Demo_telnet.dat
+#
+# Author:      Joe White
+#
+# Descr:       Not In use
+#
+# Version:    2.1 $Id: Demo_Telnet.dat,v 1.2 2008/02/20 22:03:49 joe Exp $
+#
+# Changes:
+#
+#
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2005-2008 Stoke. All rights reserved.
+#
+################################################################################
+# Cmd file for demo telnet
+#__________________________________________________________________________
+
+<Msg>		"Starting Demo ..."
+<Timeout>	10
+<Prompt>	"login: "
+
+<Msg>		"Waiting for prompt ..."
+<Send>
+<Wait>
+
+<Send>		mfg
+<Prompt>	"Password for mfg:"
+<Wait>
+
+<Send>		mfg4me
+<Prompt>	">"
+<Wait>
+
+
+<End>
+
+
+
+

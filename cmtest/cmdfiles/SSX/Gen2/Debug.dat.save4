@@ -1,0 +1,137 @@
+################################################################################
+#
+# Module:      Bench_Prog_Flash.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench_Prog_Flash.dat,v 1.1 2011/12/12 22:54:26 joe Exp $
+#
+# Changes:    Created from Bench.dat  092811
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+	<Prompt>	"#"
+	<Timeout>	10
+ 	<Msg>	"Detecting Slot 2 SFP port 0 SFP Speed from I2C"
+	<send>	"on -f /net/nv-2-0 i2c_util -w bus=3,dev=0x71,off=1,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x71,off=1,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+	<Msg>	"Detecting Slot 2 SFP port 1 SFP Speed from I2C"
+	<send>	"on -f /net/nv-2-0 i2c_util -w bus=3,dev=0x71,off=2,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x71,off=2,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+	<Msg>	"Detecting Slot 2 SFP port 2 SFP Speed from I2C"
+	<send>	"on -f /net/nv-2-0 i2c_util -w bus=3,dev=0x71,off=4,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x71,off=4,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+	<Msg>	"Detecting Slot 2 SFP port 3 SFP Speed from I2C"
+	<send>	"on -f /net/nv-2-0 i2c_util -w bus=3,dev=0x71,off=8,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x71,off=8,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-2-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+
+		<Msg>	"Detecting Slot 3 SFP port 0 SFP Speed from I2C"
+	<send>	"on -f /net/nv-3-0 i2c_util -w bus=3,dev=0x71,off=1,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x71,off=1,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+	<Msg>	"Detecting Slot 3 SFP port 1 SFP Speed from I2C"
+	<send>	"on -f /net/nv-3-0 i2c_util -w bus=3,dev=0x71,off=2,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x71,off=2,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+	<Msg>	"Detecting Slot 3 SFP port 2 SFP Speed from I2C"
+	<send>	"on -f /net/nv-3-0 i2c_util -w bus=3,dev=0x71,off=4,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x71,off=4,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+	<Msg>	"Detecting Slot 3 SFP port 3 SFP Speed from I2C"
+	<send>	"on -f /net/nv-3-0 i2c_util -w bus=3,dev=0x71,off=8,rsize=1,len=1,data=1"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x71,off=8,rsize=1,len=1,data=0"
+	<wait>
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=3,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_10GIG
+	<send>	"on -f /net/nv-3-0 i2c_util -r bus=3,dev=0x50,off=6,rsize=1,len=1,data=0"
+	<wait>
+	<GetData>	Detect_SFP_1GIG
+
+		<bypass>	$XGLC_10gigSFP_gbl
+	<msg>		"Check slot 2 SFP I2C"
+	<send>		"show port 2/0 detail"
+	<wait>
+	<getdata>
+	<CheckData>	    "10GBASE-SR"
+		<send>		"show port 2/1 detail"
+	<wait>
+	<getdata>
+	<CheckData>	    "10GBASE-SR"
+		<send>		"show port 2/2 detail"
+	<wait>
+	<getdata>
+	<CheckData>	    "10GBASE-SR"
+	<Send>		"system port-switchover 2/0"
+	<Wait>
+	<Send>		"system port-switchover 2/1"
+    <Wait>
+	<CheckData>	    "10GBASE-SR"
+	<send>		"show port 2/3 detail"
+	<wait>
+	<getdata>
+	<CheckData>	    "10GBASE-SR"
+	</Bypass>
+<End>

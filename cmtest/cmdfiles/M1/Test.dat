@@ -1,0 +1,90 @@
+################################################################################
+#
+# Module:      Bench.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench_Prog.dat,v 1.2 2008/02/20 22:03:49 joe Exp $
+#
+# Changes:    Created from Bench_IMC.dat  10/19/06
+#
+# Includes:  Check_POST_IMC.inc
+#			 Show_IMC_Cpld.inc
+#			 i2c_scan_imc.inc
+#			 check_thermal.inc
+#			 tftp_boot_imc_diag.inc
+#			 format_IMC_drives.inc
+#			 Check_IMC_PCI_V.inc
+#			 Check_Disco_imc.inc
+#            Check_IMC_drives.inc
+#			 tftpcopy_stoke.inc
+#			 cfint_boot_imc.inc
+#			 Bench_Test_IMC.inc
+#				Check_PCI_V.inc
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2008 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+<Msg>		"Test ..."
+<prompt>	"#"
+<Timeout>	10
+<GetData>
+<exec>		Get_UUT_Variables
+<Msg>		"Test Init termserver ports ..."
+<exec>      Cmd_Init_Termserver
+<send>		"nvctl -s"
+<wait>
+<GetData>
+<Msg>		"Test Init termserver ports TERM_SLOT0_1 ..."
+<exec>      Cmd_Set_Cons(TERM_SLOT0_1)
+<send>
+<wait>
+<send>		"nvctl -s"
+<wait>
+<GetData>
+<Msg>		"Test Init termserver ports TERM_SLOT0_2 ..."
+<exec>      Cmd_Set_Cons(TERM_SLOT0_2)
+<send>
+<wait>
+<send>		"nvctl -s"
+<wait>
+<GetData>
+<send>
+<wait>
+<send>		"reload"
+#<wait>
+<GetData>
+<Msg>		"Test Init termserver ports TERM_SLOT0_3 ..."
+<exec>      Cmd_Set_Cons(TERM_SLOT0_3)
+<send>
+<wait>
+<send>		"nvctl -s"
+<wait>
+<GetData>
+<Msg>		"Test Init termserver ports  ..."
+<exec>      Cmd_Set_Cons
+<send>
+<wait>
+<send>		"nvctl -s"
+<wait>
+<GetData>
+<Msg>		"Test Done ..."
+
+
+<Msg>		"Test Init termserver ports 0 ..."
+<exec>      Cmd_Set_Cons
+<send>		"nvctl -s"
+<wait>
+<sleep>		10
+<Msg>		"Test Done ..."
+#<Power>		ON
+
+<End>

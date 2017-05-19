@@ -1,0 +1,36 @@
+################################################################################
+#
+# Module:      Bench.dat
+#
+# Author:      Joe White
+#
+# Descr:       Main Execution for IMC Bench test
+#
+# Version:    1.1 $Id: Bench_Prog.dat,v 1.1 2011/12/12 22:54:26 joe Exp $
+#
+# Changes:    Created from Bench_Prog.dat Vers 2.1.dat  5/23/11
+#
+# Includes:
+#
+# Still ToDo:
+#
+#
+#            Copyright (c) 2006-2012 Stoke. All rights reserved.
+#
+################################################################################
+<Sleep>		5
+<Prompt>	"Stoke>>"
+<TimeOut>	30
+
+<Msg>		"Turning on UUT Power ..."
+<Power>		ON
+<Include>	Stop_stoke_boot.inc
+<Msg>		$Bench_Prog_card_type_gbl
+<Include>	${Bench_Prog_card_type_gbl}
+#<Msg>		"Harcoded to XGLC card"
+#<Include>	Bench_Prog_XGLC.inc
+
+<Msg>		"Turning off UUT Power ..."
+<Power>		OFF
+
+<End>
